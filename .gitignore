@@ -42,3 +42,6 @@ next-env.d.ts
 
 # generated files
 /generated
+
+# Claude Code
+CLAUDE.md
