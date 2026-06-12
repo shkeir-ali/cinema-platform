@@ -59,9 +59,10 @@ export default async function FeaturedReview() {
 
         {/* Right — frosted glass review panel */}
         <div className={styles.featuredRight}>
-          <div className={styles.decoRing}>
+          <div className={styles.ratingBlock}>
             <div className={styles.decoScore}>{rating}</div>
             <div className={styles.decoScoreSub}>out of five</div>
+            <div className={styles.decoVerdict}>Masterpiece</div>
           </div>
           <div className={styles.infoLabel}>Featured Review</div>
           <p className={styles.infoQuote}>&ldquo;{review.excerpt}&rdquo;</p>

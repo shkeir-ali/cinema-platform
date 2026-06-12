@@ -1,7 +1,7 @@
 /* ─── Featured Review — cinematic full-bleed banner ────────────────────── */
 .featuredWrap {
   position: relative;
-  min-height: 480px;
+  min-height: 560px;
   display: flex; align-items: stretch;
   border-top: 1px solid rgba(28,26,24,0.07);
   border-bottom: 1px solid rgba(28,26,24,0.07);
@@ -69,10 +69,10 @@
 
 .posterFilmTitle {
   font-family: var(--font-parisienne), 'Parisienne', cursive;
-  font-weight: 400; font-size: clamp(4.5rem, 7.5vw, 7.5rem); line-height: 1.1;
+  font-weight: 400; font-size: clamp(3.8rem, 6.5vw, 6.5rem); line-height: 1.1;
   letter-spacing: 0.01em; margin-bottom: 2rem;
   filter: drop-shadow(0 2px 16px rgba(0,0,0,0.5));
-  transform: rotate(-6deg);
+  transform: rotate(-8deg);
   transform-origin: left center;
 }
 .titleOutline {
@@ -94,48 +94,45 @@
   -webkit-backdrop-filter: blur(24px);
   border-left: 1px solid rgba(245,240,232,0.1);
   border-top: 2px solid rgba(176,84,114,0.4);
-  padding: 3.5rem 3.5rem 3.5rem;
-  display: flex; flex-direction: column; justify-content: space-between;
-  gap: 2rem;
+  padding: 2rem 3.5rem 2.5rem;
+  display: flex; flex-direction: column; justify-content: flex-start;
+  gap: 1rem;
 }
 
 .infoLabel {
   font-size: 1rem; letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--rose); font-weight: 500;
+  color: #e8b84b; font-weight: 500;
   display: flex; align-items: center; gap: 0.75rem;
 }
-.infoLabel::before { content: ''; width: 28px; height: 1px; background: var(--rose); }
+.infoLabel::before { content: ''; width: 28px; height: 1px; background: #e8b84b; }
 
 .infoQuote {
   font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-style: italic;
   font-size: 1.55rem; line-height: 1.7; color: rgba(245,240,232,0.8);
   padding-left: 1.25rem;
-  border-left: 2px solid rgba(176,84,114,0.45);
+  border-left: 2px solid rgba(232,184,75,0.5);
 }
 
-.infoMeta { display: flex; gap: 2.5rem; }
+.infoMeta { display: flex; gap: 2.5rem; margin-top: 1.75rem; }
 .infoCast { }
 .infoMetaKey { font-size: 0.52rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(245,240,232,0.3); margin-bottom: 0.3rem; }
 .infoMetaVal { font-size: 0.78rem; color: rgba(245,240,232,0.6); line-height: 1.6; }
 
-.decoRing {
-  position: relative;
+.ratingBlock {
   align-self: flex-end;
-  width: 110px; height: 110px; border-radius: 50%;
-  border: 1px solid rgba(245,240,232,0.25);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.decoRing::before {
-  content: ''; position: absolute; inset: 6px; border-radius: 50%;
-  border: 1px solid rgba(245,240,232,0.08);
+  text-align: right;
 }
 .decoScore {
-  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
-  font-size: 2.2rem; font-weight: 300; line-height: 1;
-  color: #f5f0e8; letter-spacing: -0.04em;
+  font-family: var(--font-inter), 'Inter', sans-serif;
+  font-size: 3.5rem; font-weight: 300; line-height: 0.9;
+  color: rgba(245,240,232,0.9); letter-spacing: -0.04em;
 }
-.decoScoreSub { font-size: 0.52rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(245,240,232,0.35); margin-top: 0.2rem; }
+.decoScoreSub { font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(245,240,232,0.4); margin-top: 0.5rem; }
+.decoVerdict {
+  font-family: var(--font-parisienne), 'Parisienne', cursive;
+  font-size: 2rem; color: rgba(245,240,232,0.5);
+  margin-top: 0.5rem;
+}
 
 .infoBtn {
   display: inline-flex; align-items: center; gap: 0.5rem;
@@ -143,6 +140,7 @@
   padding: 0.65rem 1.5rem; border-radius: 99px;
   border: 1px solid rgba(245,240,232,0.18);
   transition: all 0.22s; white-space: nowrap; width: fit-content;
+  margin-top: auto;
 }
 .infoBtn:hover { color: #f5f0e8; border-color: rgba(245,240,232,0.4); background: rgba(245,240,232,0.06); }
 
