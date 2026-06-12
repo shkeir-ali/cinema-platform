@@ -1,0 +1,88 @@
+/* ─── Latest Reviews Carousel ───────────────────────────────────────────── */
+.reviewsSection {
+  padding: 4rem 3.5rem;
+  border-bottom: 1px solid rgba(28,26,24,0.07);
+}
+
+.carouselWrap { position: relative; }
+
+.reviewGrid {
+  display: flex; gap: 1.25rem;
+  overflow: hidden; scroll-behavior: smooth;
+}
+
+.reviewCard {
+  flex: 0 0 calc(20% - 1rem);
+  text-decoration: none; color: inherit;
+  display: flex; flex-direction: column;
+}
+.reviewCard:hover .cardPoster { transform: translateY(-4px); }
+.reviewCard:hover .cardPosterOverlay { opacity: 1; }
+
+.carouselBtn {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--bg); border: 1px solid rgba(28,26,24,0.12);
+  color: var(--text); font-size: 1rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 10; transition: background 0.2s, border-color 0.2s;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+.carouselBtn:hover { background: var(--text); border-color: var(--text); color: var(--bg); box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
+.carouselBtn:disabled { opacity: 0.3; cursor: default; }
+.prevBtn { left: -20px; }
+.nextBtn { right: -20px; }
+
+/* Poster */
+.cardPoster {
+  position: relative; aspect-ratio: 2 / 3;
+  border-radius: 10px; overflow: hidden; margin-bottom: 0.9rem;
+  transition: transform 0.3s ease;
+  box-shadow: 0 4px 20px rgba(26,21,16,0.12);
+}
+.cardPosterBg { position: absolute; inset: 0; background: #1a1510; }
+.cardPosterImg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+.cardPosterOverlay {
+  position: absolute; inset: 0; z-index: 2;
+  background: rgba(26,21,16,0.45);
+  opacity: 0; transition: opacity 0.3s;
+  display: flex; align-items: center; justify-content: center;
+}
+.cardOverlayArrow {
+  font-size: 1.4rem; color: var(--bg);
+  transform: translateY(6px); transition: transform 0.3s;
+}
+.reviewCard:hover .cardOverlayArrow { transform: translateY(0); }
+
+/* Card text */
+.cardBody { padding: 0 0.1rem; margin-bottom: 0.5rem; }
+.cardGenreTag {
+  font-size: 0.48rem; letter-spacing: 0.22em; text-transform: uppercase;
+  font-weight: 500; margin-bottom: 0.35rem; color: var(--rose);
+}
+.cardTitle {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: 1.2rem; font-weight: 400; line-height: 1.15;
+  color: var(--text); letter-spacing: -0.01em;
+}
+.cardMeta { display: flex; justify-content: space-between; align-items: center; padding: 0 0.1rem; }
+.cardStars { font-size: 0.6rem; color: var(--rose); letter-spacing: 0.05em; }
+.cardInfo { font-size: 0.58rem; color: var(--muted); text-align: right; line-height: 1.4; }
+
+/* ─── Responsive ────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .reviewsSection { padding: 3rem 2rem; }
+  .reviewCard { flex: 0 0 calc(25% - 1rem); }
+}
+
+@media (max-width: 768px) {
+  .reviewsSection { padding: 2.5rem 1.5rem; }
+  .reviewGrid { scroll-snap-type: x mandatory; }
+  .reviewCard { flex: 0 0 75%; scroll-snap-align: center; }
+  .prevBtn { left: -10px; }
+  .nextBtn { right: -10px; }
+}
+
+@media (max-width: 480px) {
+  .reviewCard { flex: 0 0 calc(70% - 0.5rem); }
+}

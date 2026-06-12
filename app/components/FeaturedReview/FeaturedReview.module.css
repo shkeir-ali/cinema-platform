@@ -1,0 +1,149 @@
+/* ─── Featured Review ───────────────────────────────────────────────────── */
+.featuredWrap {
+  display: grid; grid-template-columns: 42% 1fr;
+  min-height: 420px;
+  border-top: 1px solid rgba(28,26,24,0.07);
+  border-bottom: 1px solid rgba(28,26,24,0.07);
+}
+
+/* Dark left panel */
+.featuredPoster {
+  position: relative; overflow: hidden;
+  background: linear-gradient(160deg, #130d20 0%, #1e1030 30%, #2a1040 60%, #180820 100%);
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 3rem 3.5rem;
+}
+
+/* Blur blobs */
+.blob { position: absolute; border-radius: 50%; filter: blur(70px); }
+.blob1 { width: 320px; height: 320px; top: -80px; left: -80px; background: #2e2450; opacity: 0.6; }
+.blob2 { width: 240px; height: 240px; top: 35%; right: -60px; background: var(--rose); opacity: 0.25; }
+.blob3 { width: 200px; height: 200px; bottom: -50px; left: 20%; background: var(--amber); opacity: 0.15; }
+
+/* Twinkling stars */
+.star { position: absolute; width: 2px; height: 2px; background: white; border-radius: 50%; opacity: 0; animation: twinkle 3s infinite; }
+.s1 { top:10%; left:20%; animation-delay:0s; }
+.s2 { top:18%; left:60%; animation-delay:0.8s; }
+.s3 { top:7%;  left:75%; animation-delay:1.5s; }
+.s4 { top:30%; left:85%; animation-delay:0.4s; }
+.s5 { top:15%; left:40%; animation-delay:2s; }
+.s6 { top:4%;  left:50%; animation-delay:1.2s; }
+.s7 { top:25%; left:10%; animation-delay:0.6s; }
+.s8 { top:40%; left:70%; animation-delay:1.8s; }
+@keyframes twinkle {
+  0%,100% { opacity:0; transform:scale(1); }
+  50% { opacity:0.7; transform:scale(1.8); }
+}
+
+/* La La Land backdrop image */
+.posterSceneImg {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 55%;
+  background: url('https://images2.alphacoders.com/789/thumb-1920-789853.jpg') center bottom / cover no-repeat;
+  mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0.85) 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0.85) 100%);
+  z-index: 1;
+}
+.posterBody { position: relative; z-index: 2; }
+.posterGenreTag {
+  font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--rose); opacity: 0.8; margin-bottom: 0.75rem;
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.posterGenreTag::before { content:''; width:20px; height:1px; background: var(--rose); opacity: 0.5; }
+.posterFilmTitle {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-weight: 300; font-size: clamp(3rem, 5vw, 4.5rem); line-height: 0.9;
+  color: #f5f0e8; letter-spacing: -0.02em; margin-bottom: 1.5rem;
+}
+.posterFilmTitle em { font-style: italic; color: rgba(245,240,232,0.45); display: block; }
+.posterDivider { width: 32px; height: 1px; background: rgba(245,240,232,0.15); margin-bottom: 1rem; }
+.posterDir { font-size: 0.68rem; color: rgba(245,240,232,0.35); letter-spacing: 0.08em; }
+
+/* Right info panel */
+.featuredInfo {
+  position: relative; padding: 3.5rem 3.5rem 3.5rem 4rem;
+  display: grid; grid-template-columns: 1fr 180px;
+  gap: 2rem; align-items: center;
+  border-left: 1px solid rgba(28,26,24,0.07);
+  overflow: hidden;
+}
+/* Ghost year watermark */
+.featuredInfo::before {
+  content: '2016';
+  position: absolute;
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: 18rem; font-weight: 300; line-height: 1; letter-spacing: -0.05em;
+  color: var(--text); opacity: 0.04;
+  right: -1rem; bottom: -2rem;
+  pointer-events: none; user-select: none;
+}
+
+.infoContent { display: flex; flex-direction: column; position: relative; z-index: 1; }
+.infoLabel {
+  font-size: 0.58rem; letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--rose); font-weight: 500; margin-bottom: 1.75rem;
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.infoLabel::before { content:''; width:20px; height:1px; background: var(--rose); }
+.infoHeadline {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: clamp(1.5rem, 2.2vw, 2rem); font-weight: 300;
+  line-height: 1.25; color: var(--text); margin-bottom: 1.5rem;
+}
+.infoHeadline em { font-style: italic; color: var(--rose); }
+.infoQuote {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-style: italic;
+  font-size: 0.95rem; line-height: 1.85; color: var(--muted);
+  margin-bottom: 2rem; padding-left: 0.9rem;
+  border-left: 2px solid rgba(176,84,114,0.18);
+}
+.infoCast { margin-bottom: 2rem; }
+.infoMetaKey { font-size: 0.52rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.2rem; }
+.infoMetaVal { font-size: 0.75rem; color: var(--text); }
+
+/* Decorative rating column */
+.infoDeco {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 1.5rem; height: 100%;
+}
+.decoRing {
+  width: 130px; height: 130px; border-radius: 50%;
+  border: 1px solid rgba(28,26,24,0.12);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  position: relative;
+}
+.decoRing::before {
+  content: ''; position: absolute; inset: 6px; border-radius: 50%;
+  border: 1px solid rgba(28,26,24,0.06);
+}
+.decoScore {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: 2.8rem; font-weight: 300; line-height: 1;
+  color: var(--text); letter-spacing: -0.04em;
+}
+.decoScoreSub { font-size: 0.52rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-top: 0.2rem; }
+.decoVline { width: 1px; height: 48px; background: rgba(28,26,24,0.1); }
+.decoVtitle {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase;
+  color: rgba(28,26,24,0.2); font-weight: 300;
+  writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg);
+}
+
+/* ─── Responsive ────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .featuredWrap { grid-template-columns: 46% 1fr; }
+  .featuredInfo { padding: 3rem 2.5rem; }
+  .infoHeadline { font-size: 1.5rem; }
+}
+
+@media (max-width: 768px) {
+  .featuredWrap { grid-template-columns: 1fr; min-height: auto; }
+  .featuredPoster { min-height: 280px; padding: 2rem 1.5rem; }
+  .posterFilmTitle { font-size: clamp(2.2rem, 8vw, 3.5rem); }
+  .featuredInfo { grid-template-columns: 1fr; padding: 2.5rem 1.5rem; }
+  .infoDeco { display: none; }
+  .infoContent { width: 100%; }
+  .infoHeadline { font-size: 1.35rem; }
+}

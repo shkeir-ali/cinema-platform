@@ -1,0 +1,99 @@
+/* ─── Latest Essays Flipbook ────────────────────────────────────────────── */
+.essaysFlip {
+  border-top: 1px solid rgba(28,26,24,0.07);
+  border-bottom: 1px solid rgba(28,26,24,0.07);
+  background: var(--text);
+  position: relative; overflow: hidden;
+  height: 480px;
+}
+.flipSlide {
+  display: grid; grid-template-columns: 55% 45%;
+  position: absolute; inset: 0;
+  opacity: 0; pointer-events: none;
+}
+.flipSlideActive { opacity: 1; pointer-events: auto; }
+
+@keyframes flipSlideIn {
+  from { opacity: 0; transform: translateX(var(--flip-dir)) scale(0.97); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+@keyframes flipSlideOut {
+  from { opacity: 1; transform: translateX(0) scale(1); }
+  to   { opacity: 0; transform: translateX(calc(var(--flip-dir) * -1)) scale(0.97); }
+}
+.animIn  { animation: flipSlideIn  0.52s cubic-bezier(0.4,0,0.2,1) forwards; }
+.animOut { animation: flipSlideOut 0.4s  cubic-bezier(0.4,0,0.2,1) forwards; }
+
+.flipContent {
+  padding: 2.75rem 3.5rem;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.flipCounter {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-style: italic;
+  font-size: 0.68rem; letter-spacing: 0.18em;
+  color: rgba(245,240,232,0.22); margin-bottom: 1rem;
+}
+.flipCounter span { color: rgba(245,240,232,0.55); }
+.flipCategory {
+  font-size: 0.58rem; letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--rose); opacity: 0.85; margin-bottom: 0.75rem;
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.flipCategory::before { content:''; width:20px; height:1px; background: var(--rose); opacity:0.5; }
+.flipTitle {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-weight: 300;
+  font-size: clamp(1.6rem, 2.8vw, 2.4rem); line-height: 1.15;
+  color: #f5f0e8; letter-spacing: -0.02em; margin-bottom: 0.9rem;
+}
+.flipExcerpt {
+  font-size: 0.78rem; line-height: 1.85;
+  color: rgba(245,240,232,0.42); margin-bottom: 0.75rem; max-width: 420px;
+}
+.flipMeta {
+  font-size: 0.65rem; color: rgba(245,240,232,0.25);
+  letter-spacing: 0.06em; margin-bottom: 1.25rem;
+}
+.flipNav { display: flex; align-items: center; gap: 1.25rem; }
+.flipArrow {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid rgba(245,240,232,0.15);
+  background: transparent; color: rgba(245,240,232,0.6);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.2s; font-size: 0.9rem;
+}
+.flipArrow:hover { border-color: rgba(245,240,232,0.4); color: #f5f0e8; }
+.flipArrow:disabled { opacity: 0.2; cursor: default; }
+.flipDots { display: flex; gap: 0.5rem; align-items: center; }
+.flipDot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: rgba(245,240,232,0.2); cursor: pointer; transition: all 0.25s;
+}
+.flipDotActive { background: rgba(245,240,232,0.7); width: 18px; border-radius: 3px; }
+
+.flipImage { position: relative; overflow: hidden; background: #111; }
+.flipImage img { width: 100%; height: 100%; object-fit: cover; display: block; filter: brightness(0.75) saturate(0.85); }
+.flipImage::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(to right, var(--text) 0%, rgba(26,21,16,0.5) 25%, transparent 60%);
+  pointer-events: none;
+}
+
+/* ─── Responsive ────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .essaysFlip { height: 420px; }
+  .flipContent { padding: 2.25rem 2.75rem; }
+  .flipTitle { font-size: clamp(1.4rem, 2.5vw, 2rem); }
+}
+
+@media (max-width: 768px) {
+  .essaysFlip { height: auto; }
+  .flipSlide { grid-template-columns: 1fr; grid-template-rows: 220px auto; position: relative; }
+  .flipSlide:not(.flipSlideActive) { display: none; }
+  .flipImage { display: block; order: -1; height: 220px; }
+  .flipContent { padding: 2.5rem 1.5rem; }
+  .flipTitle { font-size: 1.4rem; }
+}
+
+@media (max-width: 480px) {
+  .flipTitle { font-size: 1.3rem; }
+}

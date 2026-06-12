@@ -1,0 +1,103 @@
+/* ─── Browse by Genre ───────────────────────────────────────────────────── */
+.genresSection { padding: 4rem 0; border-top: 1px solid rgba(28,26,24,0.07); }
+.genresSection :global(.section-header) { margin-bottom: 0; padding: 0 3.5rem; }
+
+/* Desktop: 3 staggered centered rows */
+.genresRows { display: flex; flex-direction: column; gap: 0.85rem; padding: 2rem 0 0.5rem; overflow: hidden; }
+.genresRow { display: flex; gap: 0.75rem; align-items: center; justify-content: center; }
+.genresRow:nth-child(1) { transform: translateX(-2.5rem); }
+.genresRow:nth-child(2) { transform: translateX(1.5rem); }
+.genresRow:nth-child(3) { transform: translateX(-1rem); }
+
+/* Mobile: horizontal scroll strip (hidden on desktop) */
+.genresScrollOuter { display: none; position: relative; overflow: hidden; }
+.genresScrollOuter::before,
+.genresScrollOuter::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 100px;
+  pointer-events: none; z-index: 2;
+}
+.genresScrollOuter::before { left: 0;  background: linear-gradient(to right, var(--bg), transparent); }
+.genresScrollOuter::after  { right: 0; background: linear-gradient(to left,  var(--bg), transparent); }
+.genresScrollTrack {
+  display: flex; align-items: center; gap: 0.75rem;
+  overflow-x: auto; overflow-y: visible;
+  padding: 2rem 6rem;
+  scrollbar-width: none; cursor: grab;
+  -webkit-overflow-scrolling: touch;
+}
+.genresScrollTrack::-webkit-scrollbar { display: none; }
+.genresScrollTrack:active { cursor: grabbing; }
+.genresScrollTrack .genreBubble { flex-shrink: 0; }
+
+/* ── Genre bubble base ── */
+.genreBubble {
+  display: inline-flex; align-items: baseline; gap: 0.45rem;
+  border-radius: 99px; cursor: pointer; text-decoration: none;
+  border: 1px solid; transition: all 0.25s; white-space: nowrap;
+}
+.genreBubble:hover { transform: translateY(-2px) rotate(0deg) !important; filter: brightness(1.1); }
+
+/* Size variants */
+.sizeLg {
+  padding: 0.75rem 1.9rem;
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-style: italic; font-weight: 300;
+  font-size: 1.35rem; letter-spacing: -0.01em;
+}
+.sizeMd { padding: 0.6rem 1.4rem; font-size: 0.8rem; font-weight: 400; letter-spacing: 0.02em; }
+.sizeSm { padding: 0.45rem 1.1rem; font-size: 0.68rem; font-weight: 400; letter-spacing: 0.04em; }
+
+/* Subtle rotations */
+.r1 { transform: rotate(-2deg); }
+.r2 { transform: rotate(1.5deg); }
+.r3 { transform: rotate(-1deg); }
+.r4 { transform: rotate(2.5deg); }
+.r5 { transform: rotate(-1.5deg); }
+
+/* Per-genre color variants */
+.gDrama      { background: rgba(90,60,40,0.07);   border-color: rgba(90,60,40,0.18);   color: #5a3c28; }
+.gScifi      { background: rgba(40,70,110,0.07);  border-color: rgba(40,70,110,0.18);  color: #28466e; }
+.gHorror     { background: rgba(120,28,28,0.07);  border-color: rgba(120,28,28,0.18);  color: #781c1c; }
+.gRomance    { background: rgba(160,75,90,0.07);  border-color: rgba(160,75,90,0.18);  color: #a04b5a; }
+.gThriller   { background: rgba(55,72,48,0.07);   border-color: rgba(55,72,48,0.18);   color: #374830; }
+.gCrime      { background: rgba(48,42,60,0.07);   border-color: rgba(48,42,60,0.18);   color: #302a3c; }
+.gAnimation  { background: rgba(165,88,35,0.07);  border-color: rgba(165,88,35,0.18);  color: #a55823; }
+.gDocumentary{ background: rgba(45,78,62,0.07);   border-color: rgba(45,78,62,0.18);   color: #2d4e3e; }
+.gComedy     { background: rgba(138,108,35,0.07); border-color: rgba(138,108,35,0.18); color: #8a6c23; }
+.gWestern    { background: rgba(108,68,28,0.07);  border-color: rgba(108,68,28,0.18);  color: #6c441c; }
+.gFantasy    { background: rgba(78,52,108,0.07);  border-color: rgba(78,52,108,0.18);  color: #4e346c; }
+.gBiography  { background: rgba(65,78,78,0.07);   border-color: rgba(65,78,78,0.18);   color: #414e4e; }
+.gMusical    { background: rgba(130,65,110,0.07); border-color: rgba(130,65,110,0.18); color: #82416e; }
+.gWar        { background: rgba(75,65,45,0.07);   border-color: rgba(75,65,45,0.18);   color: #4b412d; }
+.gMystery    { background: rgba(45,55,80,0.07);   border-color: rgba(45,55,80,0.18);   color: #2d3750; }
+.gHistory    { background: rgba(100,75,40,0.07);  border-color: rgba(100,75,40,0.18);  color: #644b28; }
+.gAction     { background: rgba(140,50,30,0.07);  border-color: rgba(140,50,30,0.18);  color: #8c321e; }
+.gAdventure  { background: rgba(40,90,80,0.07);   border-color: rgba(40,90,80,0.18);   color: #285a50; }
+.gNoir       { background: rgba(35,35,45,0.07);   border-color: rgba(35,35,45,0.18);   color: #23232d; }
+.gPeriod     { background: rgba(110,80,50,0.07);  border-color: rgba(110,80,50,0.18);  color: #6e5032; }
+.gComingofage{ background: rgba(80,120,90,0.07);  border-color: rgba(80,120,90,0.18);  color: #50785a; }
+.gNeonoir    { background: rgba(60,35,70,0.07);   border-color: rgba(60,35,70,0.18);   color: #3c2346; }
+.gSurrealist { background: rgba(90,50,100,0.07);  border-color: rgba(90,50,100,0.18);  color: #5a3264; }
+.gAnime      { background: rgba(170,60,80,0.07);  border-color: rgba(170,60,80,0.18);  color: #aa3c50; }
+.gSilent     { background: rgba(85,85,75,0.07);   border-color: rgba(85,85,75,0.18);   color: #55554b; }
+.gSports     { background: rgba(40,95,55,0.07);   border-color: rgba(40,95,55,0.18);   color: #285f37; }
+
+/* ─── Responsive ────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .genresSection { padding: 3rem 2rem; }
+  .genresRow:nth-child(1) { transform: translateX(-1.5rem); }
+  .genresRow:nth-child(2) { transform: translateX(1rem); }
+  .genresRow:nth-child(3) { transform: translateX(-0.75rem); }
+}
+
+@media (max-width: 768px) {
+  .genresSection { padding: 2.5rem 0; }
+  .genresSection :global(.section-header) { padding: 0 1.5rem; }
+  .genresRows { display: none; }
+  .genresScrollOuter { display: block; }
+  .genresScrollTrack { padding: 1.5rem 4rem; gap: 0.6rem; }
+  .sizeLg { font-size: 1rem; padding: 0.6rem 1.35rem; }
+}
+
+@media (max-width: 480px) {
+  .sizeLg { font-size: 0.95rem; padding: 0.55rem 1.2rem; }
+}

@@ -1,0 +1,27 @@
+/* ─── Footer ────────────────────────────────────────────────────────────── */
+.footer {
+  border-top: 1px solid rgba(28,26,24,0.07);
+  padding: 2rem 3.5rem;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.copy { font-size: 0.65rem; color: var(--muted); letter-spacing: 0.05em; }
+.nav { display: flex; gap: 2rem; }
+.navLink {
+  font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted); text-decoration: none; transition: color 0.2s;
+}
+.navLink:hover { color: var(--text); }
+.socials { display: flex; gap: 1.1rem; align-items: center; }
+.socials a { display: flex; align-items: center; color: var(--muted); transition: color 0.2s; }
+.socials a:hover { color: var(--text); }
+.socials svg { width: 20px; height: 20px; display: block; fill: currentColor; }
+
+/* ─── Responsive ────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .footer { padding: 1.75rem 2rem; }
+}
+@media (max-width: 768px) {
+  .footer { flex-direction: column; align-items: center; gap: 1.25rem; text-align: center; padding: 2rem 1.5rem; }
+  .nav { flex-wrap: wrap; justify-content: center; gap: 1rem; }
+  .socials { justify-content: center; }
+}
