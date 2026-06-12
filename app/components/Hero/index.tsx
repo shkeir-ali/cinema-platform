@@ -187,7 +187,43 @@ export default function Hero() {
       conePoly!.classList.add('cone-on')
     }
 
-    runStartup()
+    // Animate hero stats counting up from 0 after startup sequence completes
+    const statEls = hero.querySelectorAll<HTMLElement>('.hero-stat-num')
+    const statTargets = [1240, 48, 12, 6]
+
+    function formatStatNum(n: number, target: number): string {
+      const rounded = Math.round(n)
+      return target >= 1000 ? rounded.toLocaleString('en-US') : String(rounded)
+    }
+
+    function easeOutExpo(t: number): number {
+      return t === 1 ? 1 : 1 - Math.pow(2, -10 * t)
+    }
+
+    function animateStats() {
+      const duration = 5000
+      const start = performance.now()
+
+      function tick(now: number) {
+        const elapsed = now - start
+        const t = Math.min(elapsed / duration, 1)
+        const eased = easeOutExpo(t)
+
+        statEls.forEach((el, i) => {
+          const target = statTargets[i] ?? 0
+          el.textContent = formatStatNum(eased * target, target)
+        })
+
+        if (t < 1) requestAnimationFrame(tick)
+        else statEls.forEach((el, i) => {
+          el.textContent = formatStatNum(statTargets[i] ?? 0, statTargets[i] ?? 0)
+        })
+      }
+
+      requestAnimationFrame(tick)
+    }
+
+    runStartup().then(animateStats)
 
     async function handleCameraClick() {
       if (!sequenceDone) return
@@ -1006,22 +1042,22 @@ export default function Hero() {
       {/* Stats */}
       <div className="hero-stats">
         <div className="hero-stat-item">
-          <div className="hero-stat-num">1,240</div>
+          <div className="hero-stat-num">0</div>
           <div className="hero-stat-label">Films</div>
         </div>
         <div className="hero-stat-sep" />
         <div className="hero-stat-item">
-          <div className="hero-stat-num">48</div>
+          <div className="hero-stat-num">0</div>
           <div className="hero-stat-label">Reviews</div>
         </div>
         <div className="hero-stat-sep" />
         <div className="hero-stat-item">
-          <div className="hero-stat-num">12</div>
+          <div className="hero-stat-num">0</div>
           <div className="hero-stat-label">Essays</div>
         </div>
         <div className="hero-stat-sep" />
         <div className="hero-stat-item">
-          <div className="hero-stat-num">6</div>
+          <div className="hero-stat-num">0</div>
           <div className="hero-stat-label">Lists</div>
         </div>
       </div>

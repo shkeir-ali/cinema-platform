@@ -252,6 +252,9 @@ body {
   font-size: 3.8rem; font-weight: 300; line-height: 1;
   color: var(--text); letter-spacing: -0.03em;
   transition: color 0.5s ease, text-shadow 0.5s ease;
+  font-variant-numeric: tabular-nums;
+  display: block;
+  width: 135px;
 }
 .hero-stat-label {
   font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase;
