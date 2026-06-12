@@ -97,3 +97,14 @@
 @media (max-width: 480px) {
   .flipTitle { font-size: 1.3rem; }
 }
+
+/* pill-btn override for dark background */
+.essaysFlip :global(.pill-btn) {
+  border-color: rgba(255,255,255,0.35);
+  color: rgba(255,255,255,0.85);
+}
+.essaysFlip :global(.pill-btn:hover) {
+  background: rgba(255,255,255,0.85);
+  color: #1a1510;
+  border-color: rgba(255,255,255,0.85);
+}

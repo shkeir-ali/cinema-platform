@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import styles from './LatestEssays.module.css'
 
@@ -22,11 +22,31 @@ export default function LatestEssaysFlipbook({ posts }: { posts: Post[] }) {
   const [prev, setPrev]       = useState<number | null>(null)
   const [dir, setDir]         = useState<'next' | 'prev'>('next')
 
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  const startTimer = useCallback(() => {
+    if (timerRef.current) clearInterval(timerRef.current)
+    timerRef.current = setInterval(() => {
+      setCurrent(c => {
+        const next = (c + 1) % posts.length
+        setPrev(c)
+        setDir('next')
+        return next
+      })
+    }, 10000)
+  }, [posts.length])
+
+  useEffect(() => {
+    startTimer()
+    return () => { if (timerRef.current) clearInterval(timerRef.current) }
+  }, [startTimer])
+
   function goTo(next: number, direction: 'prev' | 'next') {
     if (next === current) return
     setPrev(current)
     setDir(direction)
     setCurrent(next)
+    startTimer()
   }
 
   function slideClass(i: number) {
@@ -85,7 +105,7 @@ export default function LatestEssaysFlipbook({ posts }: { posts: Post[] }) {
               >
                 &#8594;
               </button>
-              <Link href={`/essays/${post.slug}`} className="pill-btn-light" style={{ marginLeft: '1rem' }}>
+              <Link href={`/essays/${post.slug}`} className="pill-btn" style={{ marginLeft: '1rem' }}>
                 Read Essay →
               </Link>
             </div>
