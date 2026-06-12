@@ -1,7 +1,31 @@
 import Link from 'next/link'
+import { db } from '@/lib/db'
 import styles from './FeaturedReview.module.css'
 
-export default function FeaturedReview() {
+type TitleToken = { text: string; style?: React.CSSProperties }
+
+function renderTitle(titleDisplay: unknown, fallback: string) {
+  if (!titleDisplay) return <>{fallback}</>
+  const tokens = titleDisplay as TitleToken[]
+  return (
+    <>
+      {tokens.map((token, i) => (
+        <span key={i} style={token.style}>{token.text}</span>
+      ))}
+    </>
+  )
+}
+
+export default async function FeaturedReview() {
+  const review = await db.review.findFirst({
+    where: { isFeatured: true, published: true },
+  })
+
+  if (!review) return null
+
+  const genres = review.genres.join(' · ')
+  const rating = (review.myRating).toFixed(1)
+
   return (
     <div className={styles.featuredWrap}>
       <div className={styles.featuredPoster}>
@@ -18,10 +42,12 @@ export default function FeaturedReview() {
         <div className={`${styles.star} ${styles.s8}`} />
         <div className={styles.posterSceneImg} />
         <div className={styles.posterBody}>
-          <div className={styles.posterGenreTag}>Romance · Musical</div>
-          <div className={styles.posterFilmTitle}>La La<em>Land</em></div>
+          <div className={styles.posterGenreTag}>{genres}</div>
+          <div className={styles.posterFilmTitle}>
+            {renderTitle(review.titleDisplay, review.title)}
+          </div>
           <div className={styles.posterDivider} />
-          <div className={styles.posterDir}>Damien Chazelle · 2016</div>
+          <div className={styles.posterDir}>{review.director} · {review.releaseYear}</div>
         </div>
       </div>
 
@@ -29,24 +55,26 @@ export default function FeaturedReview() {
         <div className={styles.infoContent}>
           <div className={styles.infoLabel}>Featured Review</div>
           <div className={styles.infoHeadline}>
-            A film that dares to ask<br />what it costs to <em>chase a dream.</em>
+            {review.excerpt}
           </div>
           <p className={styles.infoQuote}>
-            &ldquo;Chazelle makes melancholy feel like magic — a love letter to ambition and the people we leave behind in its pursuit.&rdquo;
+            &ldquo;{review.excerpt}&rdquo;
           </p>
-          <div className={`${styles.infoCast}`}>
-            <div className={styles.infoMetaKey}>Cast</div>
-            <div className={styles.infoMetaVal}>Ryan Gosling · Emma Stone · John Legend</div>
-          </div>
-          <Link href="/reviews/la-la-land" className="pill-btn">Read Full Review →</Link>
+          {review.cast && (
+            <div className={styles.infoCast}>
+              <div className={styles.infoMetaKey}>Cast</div>
+              <div className={styles.infoMetaVal}>{review.cast?.split(',').map(s => s.trim()).join(' · ')}</div>
+            </div>
+          )}
+          <Link href={`/reviews/${review.slug}`} className="pill-btn">Read Full Review →</Link>
         </div>
         <div className={styles.infoDeco}>
           <div className={styles.decoRing}>
-            <div className={styles.decoScore}>5.0</div>
+            <div className={styles.decoScore}>{rating}</div>
             <div className={styles.decoScoreSub}>out of five</div>
           </div>
           <div className={styles.decoVline} />
-          <div className={styles.decoVtitle}>La La Land</div>
+          <div className={styles.decoVtitle}>{review.title}</div>
         </div>
       </div>
     </div>

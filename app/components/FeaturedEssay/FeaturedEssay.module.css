@@ -33,6 +33,16 @@
   margin-bottom: 2.25rem; max-width: 520px;
 }
 
+/* pill-btn override for dark background */
+.essaySection :global(.pill-btn) {
+  border-color: rgba(255,255,255,0.35);
+}
+.essaySection :global(.pill-btn:hover) {
+  background: var(--text);
+  color: var(--bg);
+  border-color: var(--text);
+}
+
 /* ─── Responsive ────────────────────────────────────────────────────────── */
 @media (max-width: 1024px) {
   .essaySection { padding: 3rem 2rem; }

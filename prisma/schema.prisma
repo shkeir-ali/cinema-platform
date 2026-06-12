@@ -25,6 +25,7 @@ model Review {
   id           Int      @id @default(autoincrement())
   tmdbId       Int      @unique
   title        String
+  titleDisplay Json?
   director     String
   cast         String?
   posterPath   String
@@ -33,7 +34,7 @@ model Review {
   genres       String[]
   tags         String[]
   excerpt      String?  @db.Text
-  myRating     Int
+  myRating     Float
   myReview     String   @db.Text
   isFeatured   Boolean  @default(false)
   published    Boolean  @default(false)
