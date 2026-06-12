@@ -25,10 +25,15 @@ export default async function FeaturedReview() {
 
   const genres = review.genres.join(' · ')
   const rating = (review.myRating).toFixed(1)
+  const titleWords = review.title.split(' ')
+  const titleOutline = titleWords.slice(0, -1).join(' ')
+  const titleFilled = titleWords[titleWords.length - 1]
 
   return (
     <div className={styles.featuredWrap}>
-      <div className={styles.featuredPoster}>
+      {/* Full-bleed background */}
+      <div className={styles.featuredBg}>
+        <div className={styles.bgImage} />
         <div className={`${styles.blob} ${styles.blob1}`} />
         <div className={`${styles.blob} ${styles.blob2}`} />
         <div className={`${styles.blob} ${styles.blob3}`} />
@@ -40,41 +45,47 @@ export default async function FeaturedReview() {
         <div className={`${styles.star} ${styles.s6}`} />
         <div className={`${styles.star} ${styles.s7}`} />
         <div className={`${styles.star} ${styles.s8}`} />
-        <div className={styles.posterSceneImg} />
-        <div className={styles.posterBody}>
-          <div className={styles.posterGenreTag}>{genres}</div>
-          <div className={styles.posterFilmTitle}>
-            {renderTitle(review.titleDisplay, review.title)}
-          </div>
-          <div className={styles.posterDivider} />
-          <div className={styles.posterDir}>{review.director} · {review.releaseYear}</div>
-        </div>
       </div>
 
-      <div className={styles.featuredInfo}>
-        <div className={styles.infoContent}>
-          <div className={styles.infoLabel}>Featured Review</div>
-          <div className={styles.infoHeadline}>
-            {review.excerpt}
+      {/* Content */}
+      <div className={styles.featuredContent}>
+        {/* Left — film identity */}
+        <div className={styles.featuredLeft}>
+          <div className={styles.posterFilmTitle}>
+            {titleOutline && <span className={styles.titleOutline}>{titleOutline} </span>}
+            <span className={styles.titleFilled}>{titleFilled}</span>
           </div>
-          <p className={styles.infoQuote}>
-            &ldquo;{review.excerpt}&rdquo;
-          </p>
-          {review.cast && (
-            <div className={styles.infoCast}>
-              <div className={styles.infoMetaKey}>Cast</div>
-              <div className={styles.infoMetaVal}>{review.cast?.split(',').map(s => s.trim()).join(' · ')}</div>
-            </div>
-          )}
-          <Link href={`/reviews/${review.slug}`} className="pill-btn">Read Full Review →</Link>
         </div>
-        <div className={styles.infoDeco}>
+
+        {/* Right — frosted glass review panel */}
+        <div className={styles.featuredRight}>
           <div className={styles.decoRing}>
             <div className={styles.decoScore}>{rating}</div>
             <div className={styles.decoScoreSub}>out of five</div>
           </div>
-          <div className={styles.decoVline} />
-          <div className={styles.decoVtitle}>{review.title}</div>
+          <div className={styles.infoLabel}>Featured Review</div>
+          <p className={styles.infoQuote}>&ldquo;{review.excerpt}&rdquo;</p>
+          <div className={styles.infoMeta}>
+            <div className={styles.infoCast}>
+              <div className={styles.infoMetaKey}>Director</div>
+              <div className={styles.infoMetaVal}>{review.director}</div>
+            </div>
+            {review.cast && (
+              <div className={styles.infoCast}>
+                <div className={styles.infoMetaKey}>Cast</div>
+                <div className={styles.infoMetaVal}>{review.cast.split(',').map(s => s.trim()).join(' · ')}</div>
+              </div>
+            )}
+            <div className={styles.infoCast}>
+              <div className={styles.infoMetaKey}>Genre</div>
+              <div className={styles.infoMetaVal}>{genres}</div>
+            </div>
+            <div className={styles.infoCast}>
+              <div className={styles.infoMetaKey}>Year</div>
+              <div className={styles.infoMetaVal}>{review.releaseYear}</div>
+            </div>
+          </div>
+          <Link href={`/reviews/${review.slug}`} className={styles.infoBtn}>Read Full Review →</Link>
         </div>
       </div>
     </div>

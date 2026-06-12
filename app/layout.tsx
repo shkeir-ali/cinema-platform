@@ -1,6 +1,20 @@
 import type { Metadata } from 'next'
-import { Cormorant_Garamond, Inter } from 'next/font/google'
+import { Cormorant_Garamond, Inter, Parisienne, Poiret_One } from 'next/font/google'
 import './globals.css'
+
+const poiretOne = Poiret_One({
+  variable: '--font-poiret',
+  subsets: ['latin'],
+  weight: ['400'],
+  display: 'swap',
+})
+
+const parisienne = Parisienne({
+  variable: '--font-parisienne',
+  subsets: ['latin'],
+  weight: ['400'],
+  display: 'swap',
+})
 
 const cormorant = Cormorant_Garamond({
   variable: '--font-cormorant',
@@ -24,7 +38,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${inter.variable}`}>
+    <html lang="en" className={`${cormorant.variable} ${inter.variable} ${parisienne.variable} ${poiretOne.variable}`}>
       <body>{children}</body>
     </html>
   )
