@@ -86,7 +86,8 @@ export default function Hero() {
     const coneSvg = document.getElementById('lightConeSvg')
     if (!camera || !hero || !conePoly || !coneSvg) return
 
-    let lightOn = true
+    let lightOn = false
+    let sequenceDone = false
 
     function updateCone() {
       const svgRect = (coneSvg as Element).getBoundingClientRect()
@@ -94,17 +95,14 @@ export default function Hero() {
       const lensRect = lensEl
         ? lensEl.getBoundingClientRect()
         : (camera as Element).getBoundingClientRect()
-      const camSvg = document.getElementById(
-        'filmCamera',
-      ) as SVGSVGElement | null
+      const camSvg = document.getElementById('filmCamera') as SVGSVGElement | null
       const camRect = camSvg ? camSvg.getBoundingClientRect() : lensRect
       const scaleY = camRect.height / 310
-      const scaleX = camRect.width / 215
-      // lens face spans y=132–166 in SVG viewBox; x left-edge at SVG x=3 (cx=-5 + translate 8)
-      const lx = camRect.left - svgRect.left + 60 * scaleX
-      const lensTop = camRect.top - svgRect.top + 132 * scaleY
-      const lensBottom = camRect.top - svgRect.top + 166 * scaleY
-      const ly = (lensTop + lensBottom) / 2
+      const scaleX = camRect.width  / 215
+      const lx         = camRect.left - svgRect.left + 60 * scaleX
+      const lensTop    = camRect.top  - svgRect.top  + 132 * scaleY
+      const lensBottom = camRect.top  - svgRect.top  + 166 * scaleY
+      const ly         = (lensTop + lensBottom) / 2
       const hH = svgRect.height
       const hW = svgRect.width
 
@@ -116,13 +114,11 @@ export default function Hero() {
         grad.setAttribute('y2', String(ly))
         grad.setAttribute('gradientUnits', 'userSpaceOnUse')
       }
-
       const maskRect = document.getElementById('coneMaskRect')
       if (maskRect) {
         maskRect.setAttribute('height', String(hH))
         maskRect.setAttribute('width', String(hW))
       }
-
       ;(conePoly as Element).setAttribute(
         'points',
         `${lx},${lensTop} ${lx},${lensBottom} 0,${-hH * 0.15} 0,${hH * 1.15}`,
@@ -130,16 +126,96 @@ export default function Hero() {
     }
 
     updateCone()
-    hero.classList.add('light-on')
-    conePoly.classList.add('cone-on')
 
-    function handleCameraClick() {
-      lightOn = !lightOn
-      hero!.classList.toggle('light-on', lightOn)
-      updateCone()
+    const cinemaEl = document.querySelector('.hero-name em') as HTMLElement | null
+
+    // Reserve height then clear "Writing about" for typewriter
+    const preEl = document.querySelector('.hero-name-pre') as HTMLElement | null
+    if (preEl) {
+      preEl.style.minHeight = preEl.offsetHeight + 'px'
+      preEl.textContent = ''
+    }
+
+    const wait = (ms: number) => new Promise<void>(r => setTimeout(r, ms))
+
+    function setLight(on: boolean) {
+      hero!.classList.toggle('light-on', on)
+      conePoly!.classList.remove('cone-on', 'cone-off')
+      ;(conePoly as HTMLElement).style.opacity = on ? '1' : '0'
+    }
+
+    async function runStartup() {
+      await wait(800)
+
+      // Phase 1: type "Writing about"
+      if (preEl) {
+        const preText = document.createTextNode('')
+        const preCursor = document.createElement('span')
+        preCursor.className = 'hero-cursor'
+        preEl.appendChild(preText)
+        preEl.appendChild(preCursor)
+
+        const preWord = 'Writing about'
+        for (let i = 0; i < preWord.length; i++) {
+          await wait(175)
+          preText.data += preWord[i]
+        }
+
+        await wait(400)
+        preCursor.style.animation = 'none'
+        preCursor.style.transition = 'opacity 0.3s ease'
+        preCursor.style.opacity = '0'
+        await wait(320)
+        preCursor.remove()
+      }
+
+      // Phase 2: pause, then light flicker blink sequence
+      await wait(1000)
+      const blinks = [90, 130, 70, 200, 110, 90, 160, 70, 90, 300]
+      for (let i = 0; i < blinks.length; i++) {
+        setLight(i % 2 === 0)
+        await wait(blinks[i])
+      }
+
+      // Settle on — light reveals "cinema."
+      lightOn = true
+      sequenceDone = true
+      hero!.classList.add('light-on')
+      ;(conePoly as HTMLElement).style.opacity = ''
       conePoly!.classList.remove('cone-on', 'cone-off')
       void (conePoly as HTMLElement).offsetWidth
-      conePoly!.classList.add(lightOn ? 'cone-on' : 'cone-off')
+      conePoly!.classList.add('cone-on')
+    }
+
+    runStartup()
+
+    async function handleCameraClick() {
+      if (!sequenceDone) return
+
+      if (lightOn) {
+        // Turn off immediately
+        lightOn = false
+        hero!.classList.remove('light-on')
+        conePoly!.classList.remove('cone-on', 'cone-off')
+        void (conePoly as HTMLElement).offsetWidth
+        conePoly!.classList.add('cone-off')
+      } else {
+        // Blink sequence then turn on
+        sequenceDone = false
+        updateCone()
+        const blinks = [90, 130, 70, 200, 110, 90, 160, 70, 90, 300]
+        for (let i = 0; i < blinks.length; i++) {
+          setLight(i % 2 === 0)
+          await wait(blinks[i])
+        }
+        lightOn = true
+        sequenceDone = true
+        hero!.classList.add('light-on')
+        ;(conePoly as HTMLElement).style.opacity = ''
+        conePoly!.classList.remove('cone-on', 'cone-off')
+        void (conePoly as HTMLElement).offsetWidth
+        conePoly!.classList.add('cone-on')
+      }
     }
 
     camera.addEventListener('click', handleCameraClick)
@@ -153,7 +229,7 @@ export default function Hero() {
         lightOn = false
         hero!.classList.remove('light-on')
         conePoly!.classList.remove('cone-on', 'cone-off')
-      } else if (!lightOn) {
+      } else if (!lightOn && sequenceDone) {
         lightOn = true
         hero!.classList.add('light-on')
         updateCone()
@@ -178,9 +254,12 @@ export default function Hero() {
   return (
     <section className="hero">
       <div className="hero-left">
-        <div className="hero-eyebrow">Film Criticism &amp; Essays</div>
+        <div className="hero-eyebrow">
+          <span className="hero-eyebrow-frame">No. 001</span>
+          Film Criticism &amp; Essays
+        </div>
         <h1 className="hero-name">
-          Writing about
+          <span className="hero-name-pre">Writing about</span>
           <em>cinema.</em>
         </h1>
         <p className="hero-tagline">
@@ -936,6 +1015,11 @@ export default function Hero() {
         <div className="hero-stat-item">
           <div className="hero-stat-num">12</div>
           <div className="hero-stat-label">Essays</div>
+        </div>
+        <div className="hero-stat-sep" />
+        <div className="hero-stat-item">
+          <div className="hero-stat-num">6</div>
+          <div className="hero-stat-label">Lists</div>
         </div>
       </div>
     </section>
