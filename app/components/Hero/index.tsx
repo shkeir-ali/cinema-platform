@@ -743,6 +743,9 @@ export default function Hero() {
               <circle cx="162" cy="78" r="3.5" fill="#1c1814" />
             </g>
 
+            {/* REC dot */}
+            <circle cx="96" cy="124" r="2.2" className="cam-rec-dot" fill="#d03020" />
+
             {/* Viewfinder */}
             <rect
               x="142"

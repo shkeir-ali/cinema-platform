@@ -70,6 +70,16 @@ body {
   position: relative;
 }
 
+/* Ambient warm glow from camera side — appears when light turns on */
+.hero::before {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background: radial-gradient(ellipse at 78% 55%, rgba(210,145,40,0.13) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+.hero.light-on::before { opacity: 1; }
+
 /* Film grain */
 .hero::after {
   content: '';
@@ -198,6 +208,11 @@ body {
 .hero.light-on .hero-stat-num { color: #1a1208; }
 .hero.light-on .hero-stat-label { color: #8a6030; }
 .hero.light-on .hero-stat-sep { background: rgba(200,130,30,0.3); }
+
+/* REC dot */
+.cam-rec-dot { transition: fill 0.3s, opacity 0.3s; }
+.hero.light-on .cam-rec-dot { animation: recBlink 1.4s ease-in-out infinite; }
+@keyframes recBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.15; } }
 
 /* Camera reel spin */
 .cam-reel-group { transform-box: fill-box; transform-origin: center; }
