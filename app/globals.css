@@ -9,7 +9,7 @@
   --indigo:  #2e2450;
   --blue:    #3a5a8a;
   --amber:   #c8922a;
-  --rose:    #b05472;
+  --rose:    #8e3b4e;
   --plum:    #7c4a8a;
 }
 
@@ -158,17 +158,26 @@ body {
   display: inline-flex; align-items: center; gap: 0.5rem;
   font-size: 0.82rem; background: rgba(28,26,24,0.7); color: var(--bg);
   text-decoration: none; padding: 0.8rem 1.8rem; border-radius: 99px;
-  font-weight: 500; transition: opacity 0.2s, box-shadow 0.3s, background 0.5s ease;
+  font-weight: 500; border: 1.5px solid transparent;
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
-.hero-btn-primary:hover { opacity: 0.9; }
+/* filled → outline on hover */
+.hero-btn-primary:hover {
+  background: transparent; color: var(--rose);
+  border-color: var(--rose); box-shadow: none;
+}
 
 .hero-btn-secondary {
   display: inline-flex; align-items: center; gap: 0.5rem;
   font-size: 0.82rem; color: var(--muted);
   text-decoration: none; padding: 0.8rem 1.8rem; border-radius: 99px;
-  border: 1.5px solid rgba(28,26,24,0.12); transition: all 0.2s;
+  border: 1.5px solid rgba(28,26,24,0.12);
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
-.hero-btn-secondary:hover { color: var(--text); border-color: rgba(28,26,24,0.3); }
+/* outline stays — text + border turn oxblood on hover */
+.hero-btn-secondary:hover {
+  color: var(--rose); border-color: var(--rose);
+}
 
 .hero-camera {
   flex: 1; position: relative; z-index: 2;
@@ -210,21 +219,23 @@ body {
 .hero.light-on .hero-name-pre { color: var(--text); text-shadow: none; }
 .hero.light-on .hero-name {
   color: #1a1408;
-  text-shadow:
-    0 0 60px rgba(200,150,45,0.35),
-    0 0 120px rgba(200,150,45,0.18),
-    0 2px 8px rgba(180,135,40,0.15);
 }
 .hero.light-on .hero-name em {
   color: var(--rose);
-  text-shadow: 0 0 40px rgba(176,84,114,0.45), 0 0 80px rgba(176,84,114,0.2);
 }
 .hero.light-on .hero-tagline { color: #6a5420; border-left-color: rgba(200,150,45,0.5); }
 .hero.light-on .hero-btn-primary {
   background: var(--rose); color: #fff8ec;
-  box-shadow: 0 4px 24px rgba(176,84,114,0.5), 0 0 44px rgba(176,84,114,0.22);
+  box-shadow: 0 4px 14px rgba(142,59,78,0.3);
+}
+.hero.light-on .hero-btn-primary:hover {
+  background: transparent; color: var(--rose);
+  border-color: var(--rose); box-shadow: none;
 }
 .hero.light-on .hero-btn-secondary { color: #9a7420; border-color: rgba(190,145,45,0.4); }
+.hero.light-on .hero-btn-secondary:hover {
+  color: var(--rose); border-color: var(--rose);
+}
 
 /* Stats react to light too */
 .hero.light-on .hero-stat-num { color: #1a1408; }

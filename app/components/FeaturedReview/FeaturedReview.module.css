@@ -110,7 +110,7 @@
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border-left: 1px solid rgba(245,240,232,0.1);
-  border-top: 2px solid rgba(176,84,114,0.4);
+  border-top: 2px solid rgba(142,59,78,0.4);
   padding: 15rem 3.5rem 3.5rem;
   display: flex; flex-direction: column; justify-content: flex-start;
   gap: 1rem;
