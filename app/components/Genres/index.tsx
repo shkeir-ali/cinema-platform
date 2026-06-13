@@ -48,16 +48,117 @@ const allGenres = [...row1, ...row2, ...row3]
 
 function GenreBubble({ label, cls }: { label: string; cls: string }) {
   return (
-    <Link href={`/reviews?genre=${label.toLowerCase().replace(/\s+/g, '-')}`} className={cls}>
-      {label}
-    </Link>
+    <span className={styles.genreBubbleWrap}>
+      <Link href={`/reviews?genre=${label.toLowerCase().replace(/\s+/g, '-')}`} className={cls}>
+        {label}
+      </Link>
+    </span>
   )
 }
 
 export default function Genres() {
-  const trackRef = useRef<HTMLDivElement>(null)
+  const trackRef  = useRef<HTMLDivElement>(null)
+  const rowsRef   = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    // Staggered entrance
+    const rows = rowsRef.current
+    if (rows) {
+      const bubbles = Array.from(rows.querySelectorAll<HTMLElement>(`.${styles.genreBubble}`))
+      bubbles.forEach((b, i) => { b.style.setProperty('--i', String(i)) })
+      const wrappers = Array.from(rows.querySelectorAll<HTMLElement>(`.${styles.genreBubbleWrap}`))
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            rows.classList.add(styles.rowsFloat)
+            observer.disconnect()
+          }
+        },
+        { threshold: 0.1 }
+      )
+      observer.observe(rows)
+
+      // Magnetic repel — lerp loop so every transition is smooth:
+      // entering range, leaving a bubble border, leaving the section.
+      const RADIUS = 110
+      const MAX_PUSH = 18
+      const LERP = 0.12
+      let origins: { x: number; y: number }[] = []
+      let targets:  { x: number; y: number }[] = wrappers.map(() => ({ x: 0, y: 0 }))
+      let currents: { x: number; y: number }[] = wrappers.map(() => ({ x: 0, y: 0 }))
+      let rafId: number | null = null
+      let hovering = false
+
+      function tick() {
+        let active = false
+        wrappers.forEach((w, i) => {
+          const c = currents[i], t = targets[i]
+          c.x += (t.x - c.x) * LERP
+          c.y += (t.y - c.y) * LERP
+          if (Math.abs(t.x - c.x) > 0.05 || Math.abs(t.y - c.y) > 0.05) active = true
+          w.style.translate = `${c.x}px ${c.y}px`
+        })
+        rafId = (active || hovering) ? requestAnimationFrame(tick) : null
+      }
+
+      function startLoop() {
+        if (!rafId) rafId = requestAnimationFrame(tick)
+      }
+
+      function cacheOrigins() {
+        wrappers.forEach(w => { w.style.translate = '' })
+        currents = wrappers.map(() => ({ x: 0, y: 0 }))
+        targets  = wrappers.map(() => ({ x: 0, y: 0 }))
+        const rect = rows.getBoundingClientRect()
+        origins = wrappers.map(w => {
+          const wr = w.getBoundingClientRect()
+          return { x: wr.left + wr.width / 2 - rect.left, y: wr.top + wr.height / 2 - rect.top }
+        })
+      }
+
+      function onRepelEnter() {
+        hovering = true
+        cacheOrigins()
+        startLoop()
+      }
+
+      function onRepelMove(e: MouseEvent) {
+        const rect = rows.getBoundingClientRect()
+        const cx = e.clientX - rect.left
+        const cy = e.clientY - rect.top
+        const hoveredWrap = (e.target as HTMLElement).closest(`.${styles.genreBubbleWrap}`) as HTMLElement | null
+
+        wrappers.forEach((w, i) => {
+          if (w === hoveredWrap) {
+            // freeze target at current lerp position — eases to a stop
+            targets[i] = { x: currents[i].x, y: currents[i].y }
+            return
+          }
+          const { x: bx, y: by } = origins[i]
+          const dx = bx - cx
+          const dy = by - cy
+          const dist = Math.sqrt(dx * dx + dy * dy)
+          if (dist < RADIUS && dist > 0) {
+            const force = (1 - dist / RADIUS) * MAX_PUSH
+            targets[i] = { x: (dx / dist) * force, y: (dy / dist) * force }
+          } else {
+            targets[i] = { x: 0, y: 0 }
+          }
+        })
+      }
+
+      function onRepelLeave() {
+        hovering = false
+        wrappers.forEach((_, i) => { targets[i] = { x: 0, y: 0 } })
+        startLoop()
+      }
+
+      rows.addEventListener('mouseenter', onRepelEnter)
+      rows.addEventListener('mousemove', onRepelMove)
+      rows.addEventListener('mouseleave', onRepelLeave)
+    }
+
     const track = trackRef.current
     if (!track) return
     let isDown = false, startX = 0, scrollLeft = 0
@@ -89,7 +190,7 @@ export default function Genres() {
       </div>
 
       {/* Desktop: 3 staggered rows */}
-      <div className={styles.genresRows}>
+      <div className={styles.genresRows} ref={rowsRef}>
         <div className={styles.genresRow}>
           {row1.map(g => <GenreBubble key={g.label} {...g} />)}
         </div>

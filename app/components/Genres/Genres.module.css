@@ -3,7 +3,7 @@
 .genresSection :global(.section-header) { margin-bottom: 0; padding: 0 3.5rem; }
 
 /* Desktop: 3 staggered centered rows */
-.genresRows { display: flex; flex-direction: column; gap: 0.85rem; padding: 2rem 0 0.5rem; overflow: hidden; }
+.genresRows { display: flex; flex-direction: column; gap: 0.85rem; padding: 2rem 0 0.5rem; }
 .genresRow { display: flex; gap: 0.75rem; align-items: center; justify-content: center; }
 .genresRow:nth-child(1) { transform: translateX(-2.5rem); }
 .genresRow:nth-child(2) { transform: translateX(1.5rem); }
@@ -29,13 +29,46 @@
 .genresScrollTrack:active { cursor: grabbing; }
 .genresScrollTrack .genreBubble { flex-shrink: 0; }
 
+/* Repel wrapper — layout-transparent, only holds the repel translate */
+.genreBubbleWrap { display: inline-flex; }
+
 /* ── Genre bubble base ── */
 .genreBubble {
   display: inline-flex; align-items: baseline; gap: 0.45rem;
   border-radius: 99px; cursor: pointer; text-decoration: none;
   border: 1px solid; transition: all 0.25s; white-space: nowrap;
 }
-.genreBubble:hover { transform: translateY(-2px) rotate(0deg) !important; filter: brightness(1.1); }
+.rowsFloat .genreBubble {
+  animation: bubbleFloat 3.8s ease-in-out infinite alternate;
+  animation-delay: calc(var(--i, 0) * -0.18s);
+}
+@keyframes bubbleFloat {
+  from { translate: 0 0; }
+  to   { translate: 0 -7px; }
+}
+.genreBubble {
+  overflow: hidden;
+}
+.genreBubble::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -80%;
+  width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent);
+  transform: skewX(-15deg);
+  pointer-events: none;
+}
+.genreBubble:hover::before {
+  animation: bubbleShimmer 0.55s ease-out forwards;
+}
+@keyframes bubbleShimmer {
+  to { left: 140%; }
+}
+.genreBubble:hover {
+  transform: translateY(-2px) rotate(0deg) !important;
+  box-shadow: 0 0 16px 3px var(--glow, rgba(100,80,60,0.25));
+  border-color: var(--glow-border, currentColor);
+}
 
 /* Size variants */
 .sizeLg {
@@ -54,32 +87,32 @@
 .r5 { transform: rotate(-1.5deg); }
 
 /* Per-genre color variants */
-.gDrama      { background: rgba(90,60,40,0.07);   border-color: rgba(90,60,40,0.18);   color: #5a3c28; }
-.gScifi      { background: rgba(40,70,110,0.07);  border-color: rgba(40,70,110,0.18);  color: #28466e; }
-.gHorror     { background: rgba(120,28,28,0.07);  border-color: rgba(120,28,28,0.18);  color: #781c1c; }
-.gRomance    { background: rgba(160,75,90,0.07);  border-color: rgba(160,75,90,0.18);  color: #a04b5a; }
-.gThriller   { background: rgba(55,72,48,0.07);   border-color: rgba(55,72,48,0.18);   color: #374830; }
-.gCrime      { background: rgba(48,42,60,0.07);   border-color: rgba(48,42,60,0.18);   color: #302a3c; }
-.gAnimation  { background: rgba(165,88,35,0.07);  border-color: rgba(165,88,35,0.18);  color: #a55823; }
-.gDocumentary{ background: rgba(45,78,62,0.07);   border-color: rgba(45,78,62,0.18);   color: #2d4e3e; }
-.gComedy     { background: rgba(138,108,35,0.07); border-color: rgba(138,108,35,0.18); color: #8a6c23; }
-.gWestern    { background: rgba(108,68,28,0.07);  border-color: rgba(108,68,28,0.18);  color: #6c441c; }
-.gFantasy    { background: rgba(78,52,108,0.07);  border-color: rgba(78,52,108,0.18);  color: #4e346c; }
-.gBiography  { background: rgba(65,78,78,0.07);   border-color: rgba(65,78,78,0.18);   color: #414e4e; }
-.gMusical    { background: rgba(130,65,110,0.07); border-color: rgba(130,65,110,0.18); color: #82416e; }
-.gWar        { background: rgba(75,65,45,0.07);   border-color: rgba(75,65,45,0.18);   color: #4b412d; }
-.gMystery    { background: rgba(45,55,80,0.07);   border-color: rgba(45,55,80,0.18);   color: #2d3750; }
-.gHistory    { background: rgba(100,75,40,0.07);  border-color: rgba(100,75,40,0.18);  color: #644b28; }
-.gAction     { background: rgba(140,50,30,0.07);  border-color: rgba(140,50,30,0.18);  color: #8c321e; }
-.gAdventure  { background: rgba(40,90,80,0.07);   border-color: rgba(40,90,80,0.18);   color: #285a50; }
-.gNoir       { background: rgba(35,35,45,0.07);   border-color: rgba(35,35,45,0.18);   color: #23232d; }
-.gPeriod     { background: rgba(110,80,50,0.07);  border-color: rgba(110,80,50,0.18);  color: #6e5032; }
-.gComingofage{ background: rgba(80,120,90,0.07);  border-color: rgba(80,120,90,0.18);  color: #50785a; }
-.gNeonoir    { background: rgba(60,35,70,0.07);   border-color: rgba(60,35,70,0.18);   color: #3c2346; }
-.gSurrealist { background: rgba(90,50,100,0.07);  border-color: rgba(90,50,100,0.18);  color: #5a3264; }
-.gAnime      { background: rgba(170,60,80,0.07);  border-color: rgba(170,60,80,0.18);  color: #aa3c50; }
-.gSilent     { background: rgba(85,85,75,0.07);   border-color: rgba(85,85,75,0.18);   color: #55554b; }
-.gSports     { background: rgba(40,95,55,0.07);   border-color: rgba(40,95,55,0.18);   color: #285f37; }
+.gDrama      { background: rgba(90,60,40,0.07);   border-color: rgba(90,60,40,0.18);   color: #5a3c28; --glow: rgba(90,60,40,0.35); }
+.gScifi      { background: rgba(40,70,110,0.07);  border-color: rgba(40,70,110,0.18);  color: #28466e; --glow: rgba(40,70,110,0.38); }
+.gHorror     { background: rgba(120,28,28,0.07);  border-color: rgba(120,28,28,0.18);  color: #781c1c; --glow: rgba(120,28,28,0.38); }
+.gRomance    { background: rgba(160,75,90,0.07);  border-color: rgba(160,75,90,0.18);  color: #a04b5a; --glow: rgba(160,75,90,0.38); }
+.gThriller   { background: rgba(55,72,48,0.07);   border-color: rgba(55,72,48,0.18);   color: #374830; --glow: rgba(55,72,48,0.38); }
+.gCrime      { background: rgba(48,42,60,0.07);   border-color: rgba(48,42,60,0.18);   color: #302a3c; --glow: rgba(48,42,60,0.38); }
+.gAnimation  { background: rgba(165,88,35,0.07);  border-color: rgba(165,88,35,0.18);  color: #a55823; --glow: rgba(165,88,35,0.38); }
+.gDocumentary{ background: rgba(45,78,62,0.07);   border-color: rgba(45,78,62,0.18);   color: #2d4e3e; --glow: rgba(45,78,62,0.38); }
+.gComedy     { background: rgba(138,108,35,0.07); border-color: rgba(138,108,35,0.18); color: #8a6c23; --glow: rgba(138,108,35,0.38); }
+.gWestern    { background: rgba(108,68,28,0.07);  border-color: rgba(108,68,28,0.18);  color: #6c441c; --glow: rgba(108,68,28,0.38); }
+.gFantasy    { background: rgba(78,52,108,0.07);  border-color: rgba(78,52,108,0.18);  color: #4e346c; --glow: rgba(78,52,108,0.38); }
+.gBiography  { background: rgba(65,78,78,0.07);   border-color: rgba(65,78,78,0.18);   color: #414e4e; --glow: rgba(65,78,78,0.38); }
+.gMusical    { background: rgba(130,65,110,0.07); border-color: rgba(130,65,110,0.18); color: #82416e; --glow: rgba(130,65,110,0.38); }
+.gWar        { background: rgba(75,65,45,0.07);   border-color: rgba(75,65,45,0.18);   color: #4b412d; --glow: rgba(75,65,45,0.38); }
+.gMystery    { background: rgba(45,55,80,0.07);   border-color: rgba(45,55,80,0.18);   color: #2d3750; --glow: rgba(45,55,80,0.38); }
+.gHistory    { background: rgba(100,75,40,0.07);  border-color: rgba(100,75,40,0.18);  color: #644b28; --glow: rgba(100,75,40,0.38); }
+.gAction     { background: rgba(140,50,30,0.07);  border-color: rgba(140,50,30,0.18);  color: #8c321e; --glow: rgba(140,50,30,0.38); }
+.gAdventure  { background: rgba(40,90,80,0.07);   border-color: rgba(40,90,80,0.18);   color: #285a50; --glow: rgba(40,90,80,0.38); }
+.gNoir       { background: rgba(35,35,45,0.07);   border-color: rgba(35,35,45,0.18);   color: #23232d; --glow: rgba(35,35,45,0.38); }
+.gPeriod     { background: rgba(110,80,50,0.07);  border-color: rgba(110,80,50,0.18);  color: #6e5032; --glow: rgba(110,80,50,0.38); }
+.gComingofage{ background: rgba(80,120,90,0.07);  border-color: rgba(80,120,90,0.18);  color: #50785a; --glow: rgba(80,120,90,0.38); }
+.gNeonoir    { background: rgba(60,35,70,0.07);   border-color: rgba(60,35,70,0.18);   color: #3c2346; --glow: rgba(60,35,70,0.38); }
+.gSurrealist { background: rgba(90,50,100,0.07);  border-color: rgba(90,50,100,0.18);  color: #5a3264; --glow: rgba(90,50,100,0.38); }
+.gAnime      { background: rgba(170,60,80,0.07);  border-color: rgba(170,60,80,0.18);  color: #aa3c50; --glow: rgba(170,60,80,0.38); }
+.gSilent     { background: rgba(85,85,75,0.07);   border-color: rgba(85,85,75,0.18);   color: #55554b; --glow: rgba(85,85,75,0.38); }
+.gSports     { background: rgba(40,95,55,0.07);   border-color: rgba(40,95,55,0.18);   color: #285f37; --glow: rgba(40,95,55,0.38); }
 
 /* ─── Responsive ────────────────────────────────────────────────────────── */
 @media (max-width: 1024px) {

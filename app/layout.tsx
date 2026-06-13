@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Cormorant_Garamond, Inter, Parisienne, Poiret_One } from 'next/font/google'
+import SectionObserver from './components/SectionObserver'
 import './globals.css'
 
 const poiretOne = Poiret_One({
@@ -39,7 +40,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${cormorant.variable} ${inter.variable} ${parisienne.variable} ${poiretOne.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <SectionObserver />
+      </body>
     </html>
   )
 }
