@@ -64,9 +64,20 @@ export default function Header() {
   return (
     <>
       <header className={styles.header}>
-        <Link href="/" className={styles.logo}>
-          <span className={styles.logoFirst}>ali</span>
-          <span className={styles.logoLast}>Shkeir</span>
+        <Link href="/" className={styles.logo} aria-label="Ali Shkeir — Film Journal">
+          <svg className={styles.logoMark} viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z" />
+            <g className={styles.clapTop}>
+              <path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3Z" />
+              <path d="m6.2 5.3 3.1 3.9" />
+              <path d="m12.4 3.4 3.1 4" />
+            </g>
+          </svg>
+          <span className={styles.logoText}>
+            <span className={styles.logoName}>ali Shkeir</span>
+            <span className={styles.logoTag}>Film Journal</span>
+          </span>
         </Link>
 
         <nav className={styles.nav}>
