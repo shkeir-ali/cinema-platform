@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { db } from '@/lib/db'
 import styles from './FeaturedReview.module.css'
+import FeaturedReviewEntrance from './FeaturedReviewEntrance'
 
 type TitleToken = { text: string; style?: React.CSSProperties }
 
@@ -31,6 +32,7 @@ export default async function FeaturedReview() {
 
   return (
     <div className={styles.featuredWrap}>
+      <FeaturedReviewEntrance />
       {/* Full-bleed background */}
       <div className={styles.featuredBg}>
         <div className={styles.bgImage} />

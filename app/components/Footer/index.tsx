@@ -23,18 +23,19 @@ const LetterboxdIcon = () => (
 export default function Footer() {
   return (
     <footer className={styles.footer}>
-      <div className={styles.copy}>© 2026 Ali Shkeir</div>
-
-      <nav className={styles.nav}>
-        <Link href="/now"     className={styles.navLink}>Now Watching</Link>
-        <Link href="/about"   className={styles.navLink}>About</Link>
-        <Link href="/contact" className={styles.navLink}>Contact</Link>
-      </nav>
-
-      <div className={styles.socials}>
-        <a href="https://github.com/shkeir-ali" title="GitHub" target="_blank" rel="noopener noreferrer"><GithubIcon /></a>
-        <a href="https://www.linkedin.com/in/ali-shkeir" title="LinkedIn" target="_blank" rel="noopener noreferrer"><LinkedInIcon /></a>
-        <a href="https://boxd.it/aPRFT" title="Letterboxd" target="_blank" rel="noopener noreferrer"><LetterboxdIcon /></a>
+      <p className={styles.tagline}>Film criticism & essays — one obsessive's honest take on cinema.</p>
+      <div className={styles.bottom}>
+        <div className={styles.copy}>© 2026 Ali Shkeir</div>
+        <nav className={styles.nav}>
+          <Link href="/now"     className={styles.navLink}>Now Watching</Link>
+          <Link href="/about"   className={styles.navLink}>About</Link>
+          <Link href="/contact" className={styles.navLink}>Contact</Link>
+        </nav>
+        <div className={styles.socials}>
+          <a href="https://github.com/shkeir-ali" title="GitHub" target="_blank" rel="noopener noreferrer"><GithubIcon /></a>
+          <a href="https://www.linkedin.com/in/ali-shkeir" title="LinkedIn" target="_blank" rel="noopener noreferrer"><LinkedInIcon /></a>
+          <a href="https://boxd.it/aPRFT" title="Letterboxd" target="_blank" rel="noopener noreferrer"><LetterboxdIcon /></a>
+        </div>
       </div>
     </footer>
   )

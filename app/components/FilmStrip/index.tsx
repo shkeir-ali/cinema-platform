@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import styles from './FilmStrip.module.css'
+import FilmStripEntrance from './FilmStripEntrance'
 
 const collections = [
   { num: '01', category: 'Canon',    title: 'Criterion Essentials',  desc: 'The films that redefined what cinema could be.',         count: '38 films' },
@@ -18,6 +19,7 @@ export default function FilmStrip() {
         <Link href="/lists" className="section-link">Browse all →</Link>
       </div>
       <div className={styles.filmstripWrap}>
+        <FilmStripEntrance />
         <div className={styles.filmstripPerfs} />
         <div className={styles.filmstripReel}>
           <div className={styles.filmstripInner}>

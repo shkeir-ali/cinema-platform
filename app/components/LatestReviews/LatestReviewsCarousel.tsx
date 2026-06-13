@@ -49,9 +49,10 @@ function toStars(rating: number) {
 }
 
 export default function LatestReviewsCarousel({ reviews }: { reviews: Review[] }) {
-  const trackRef = useRef<HTMLDivElement>(null)
-  const prevRef  = useRef<HTMLButtonElement>(null)
-  const nextRef  = useRef<HTMLButtonElement>(null)
+  const trackRef   = useRef<HTMLDivElement>(null)
+  const prevRef    = useRef<HTMLButtonElement>(null)
+  const nextRef    = useRef<HTMLButtonElement>(null)
+  const wrapRef    = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const track = trackRef.current
@@ -108,17 +109,28 @@ export default function LatestReviewsCarousel({ reviews }: { reviews: Review[] }
 
     prev.disabled = false
     next.disabled = false
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          wrapRef.current?.classList.add(styles.wrapVisible)
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.3 }
+    )
+    if (wrapRef.current) observer.observe(wrapRef.current)
   }, [])
 
   return (
-    <div className={styles.carouselWrap}>
+    <div className={styles.carouselWrap} ref={wrapRef}>
       <button className={`${styles.carouselBtn} ${styles.prevBtn}`} ref={prevRef}>&#8592;</button>
       <div className={styles.reviewGrid} ref={trackRef}>
         {reviews.map(r => (
           <Link key={r.slug} href={`/reviews/${r.slug}`} className={styles.reviewCard}>
             <div className={styles.cardPoster}>
               <div className={styles.cardPosterBg} />
-              <img className={styles.cardPosterImg} src={`${TMDB_IMG}${r.posterPath}`} alt={r.title} />
+              <img className={styles.cardPosterImg} src={`${TMDB_IMG}${r.posterPath}`} alt={r.title} loading="lazy" />
               <div className={styles.cardPosterOverlay}>
                 <span className={styles.cardOverlayArrow}>→</span>
               </div>

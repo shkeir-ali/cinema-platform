@@ -16,6 +16,17 @@
   text-decoration: none; color: inherit;
   display: flex; flex-direction: column;
 }
+
+.carouselWrap {
+  position: relative;
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.carouselWrap.wrapVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
 .reviewCard:hover .cardPoster { transform: translateY(-4px); }
 .reviewCard:hover .cardPosterOverlay { opacity: 1; }
 
@@ -57,17 +68,17 @@
 /* Card text */
 .cardBody { padding: 0 0.1rem; margin-bottom: 0.5rem; }
 .cardGenreTag {
-  font-size: 0.48rem; letter-spacing: 0.22em; text-transform: uppercase;
-  font-weight: 500; margin-bottom: 0.35rem; color: var(--rose);
+  font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase;
+  font-weight: 500; margin-bottom: 0.4rem; color: var(--rose);
 }
 .cardTitle {
   font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
-  font-size: 1.2rem; font-weight: 400; line-height: 1.15;
+  font-size: 1.3rem; font-weight: 400; line-height: 1.15;
   color: var(--text); letter-spacing: -0.01em;
 }
 .cardMeta { display: flex; justify-content: space-between; align-items: center; padding: 0 0.1rem; }
-.cardStars { font-size: 0.6rem; color: var(--rose); letter-spacing: 0.05em; }
-.cardInfo { font-size: 0.58rem; color: var(--muted); text-align: right; line-height: 1.4; }
+.cardStars { font-size: 0.72rem; color: var(--rose); letter-spacing: 0.05em; }
+.cardInfo { font-size: 0.7rem; color: var(--muted); text-align: right; line-height: 1.4; }
 
 /* ─── Responsive ────────────────────────────────────────────────────────── */
 @media (max-width: 1024px) {

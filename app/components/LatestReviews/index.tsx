@@ -22,7 +22,7 @@ export default async function LatestReviews() {
   return (
     <div className={styles.reviewsSection}>
       <div className="section-header">
-        <h2 className="section-title">Latest Reviews</h2>
+        <h2 className="section-title">Reviews</h2>
         <Link href="/reviews" className="section-link">View all →</Link>
       </div>
       <LatestReviewsCarousel reviews={reviews} />

@@ -1,11 +1,28 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import styles from './Newsletter.module.css'
 
 export default function Newsletter() {
   const [email, setEmail] = useState('')
   const [submitted, setSubmitted] = useState(false)
+  const sectionRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const el = sectionRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.classList.add(styles.sectionVisible)
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.75 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -14,10 +31,10 @@ export default function Newsletter() {
   }
 
   return (
-    <div className={styles.newsletterSection}>
-      <div className={styles.eyebrow}>Stay in the loop</div>
+    <div ref={sectionRef} className={styles.newsletterSection}>
+      <div className={styles.eyebrow}>Dispatches from the dark</div>
       <h2 className={styles.title}>New reviews, essays &amp; lists — straight to your inbox.</h2>
-      <p className={styles.sub}>No noise. Just honest writing about film, dropped whenever something is worth saying.</p>
+      <p className={styles.sub}>No noise. No schedule. Just honest writing about film, sent whenever something is worth saying.</p>
       {submitted ? (
         <p className={styles.confirmed}>You&apos;re in. Talk soon.</p>
       ) : (

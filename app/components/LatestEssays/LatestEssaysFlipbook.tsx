@@ -23,6 +23,7 @@ export default function LatestEssaysFlipbook({ posts }: { posts: Post[] }) {
   const [dir, setDir]         = useState<'next' | 'prev'>('next')
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const wrapRef  = useRef<HTMLDivElement>(null)
 
   const startTimer = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current)
@@ -40,6 +41,22 @@ export default function LatestEssaysFlipbook({ posts }: { posts: Post[] }) {
     startTimer()
     return () => { if (timerRef.current) clearInterval(timerRef.current) }
   }, [startTimer])
+
+  useEffect(() => {
+    const el = wrapRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.classList.add(styles.flipVisible)
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.3 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
 
   function goTo(next: number, direction: 'prev' | 'next') {
     if (next === current) return
@@ -63,7 +80,7 @@ export default function LatestEssaysFlipbook({ posts }: { posts: Post[] }) {
   }
 
   return (
-    <div className={styles.essaysFlip}>
+    <div ref={wrapRef} className={styles.essaysFlip}>
       {posts.map((post, i) => (
         <div
           key={post.slug}
@@ -111,7 +128,7 @@ export default function LatestEssaysFlipbook({ posts }: { posts: Post[] }) {
             </div>
           </div>
           <div className={styles.flipImage}>
-            <img src={`https://picsum.photos/seed/${post.slug}/900/480`} alt={post.title} />
+            <img src={`https://picsum.photos/seed/${post.slug}/900/480`} alt={post.title} loading="lazy" />
           </div>
         </div>
       ))}

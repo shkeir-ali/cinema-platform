@@ -65,7 +65,13 @@ export default function Genres() {
     const rows = rowsRef.current
     if (rows) {
       const bubbles = Array.from(rows.querySelectorAll<HTMLElement>(`.${styles.genreBubble}`))
-      bubbles.forEach((b, i) => { b.style.setProperty('--i', String(i)) })
+      bubbles.forEach((b, i) => {
+        b.style.setProperty('--i', String(i))
+        const ox = (Math.random() * 240 - 120).toFixed(0)
+        const oy = (Math.random() * 80 - 40).toFixed(0)
+        b.style.setProperty('--ox', `${ox}px`)
+        b.style.setProperty('--oy', `${oy}px`)
+      })
       const wrappers = Array.from(rows.querySelectorAll<HTMLElement>(`.${styles.genreBubbleWrap}`))
 
       const observer = new IntersectionObserver(
@@ -75,7 +81,7 @@ export default function Genres() {
             observer.disconnect()
           }
         },
-        { threshold: 0.1 }
+        { threshold: 0.4 }
       )
       observer.observe(rows)
 
@@ -124,12 +130,14 @@ export default function Genres() {
       }
 
       function onRepelMove(e: MouseEvent) {
+        if (origins.length === 0) cacheOrigins()
         const rect = rows.getBoundingClientRect()
         const cx = e.clientX - rect.left
         const cy = e.clientY - rect.top
         const hoveredWrap = (e.target as HTMLElement).closest(`.${styles.genreBubbleWrap}`) as HTMLElement | null
 
         wrappers.forEach((w, i) => {
+          if (!origins[i]) return
           if (w === hoveredWrap) {
             // freeze target at current lerp position — eases to a stop
             targets[i] = { x: currents[i].x, y: currents[i].y }

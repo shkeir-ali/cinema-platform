@@ -18,9 +18,9 @@ export default function Home() {
         <FeaturedReview />
         <LatestReviews />
         <FeaturedEssay />
-        <LatestEssays />
-        <Genres />
         <FilmStrip />
+        <Genres />
+        <LatestEssays />
         <Newsletter />
       </main>
       <Footer />

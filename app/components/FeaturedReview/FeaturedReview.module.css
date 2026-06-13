@@ -1,7 +1,7 @@
 /* ─── Featured Review — cinematic full-bleed banner ────────────────────── */
 .featuredWrap {
   position: relative;
-  min-height: 560px;
+  min-height: 720px;
   display: flex; align-items: stretch;
   border-top: 1px solid rgba(28,26,24,0.07);
   border-bottom: 1px solid rgba(28,26,24,0.07);
@@ -44,6 +44,23 @@
   50% { opacity:0.7; transform:scale(1.8); }
 }
 
+/* Entrance animation */
+.featuredLeft {
+  opacity: 0;
+  translate: -80px 0;
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), translate 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.featuredRight {
+  opacity: 0;
+  translate: 80px 0;
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.15s, translate 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.15s;
+}
+.wrapVisible .featuredLeft,
+.wrapVisible .featuredRight {
+  opacity: 1;
+  translate: 0 0;
+}
+
 /* Content grid */
 .featuredContent {
   position: relative; z-index: 2;
@@ -61,7 +78,7 @@
 }
 
 .posterGenreTag {
-  font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase;
+  font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
   color: var(--rose); opacity: 0.85; margin-bottom: 1.25rem;
   display: flex; align-items: center; gap: 0.6rem;
 }
@@ -84,7 +101,7 @@
 }
 
 .posterDivider { width: 32px; height: 1px; background: rgba(245,240,232,0.15); margin-bottom: 1rem; }
-.posterDir { font-size: 0.68rem; color: rgba(245,240,232,0.35); letter-spacing: 0.08em; }
+.posterDir { font-size: 0.75rem; color: rgba(245,240,232,0.35); letter-spacing: 0.08em; }
 
 /* Right — frosted glass review panel */
 .featuredRight {
@@ -94,7 +111,7 @@
   -webkit-backdrop-filter: blur(24px);
   border-left: 1px solid rgba(245,240,232,0.1);
   border-top: 2px solid rgba(176,84,114,0.4);
-  padding: 2rem 3.5rem 2.5rem;
+  padding: 15rem 3.5rem 3.5rem;
   display: flex; flex-direction: column; justify-content: flex-start;
   gap: 1rem;
 }
@@ -108,18 +125,20 @@
 
 .infoQuote {
   font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-style: italic;
-  font-size: 1.55rem; line-height: 1.7; color: rgba(245,240,232,0.8);
+  font-size: 1.7rem; line-height: 1.7; color: rgba(245,240,232,0.8);
   padding-left: 1.25rem;
   border-left: 2px solid rgba(232,184,75,0.5);
 }
 
 .infoMeta { display: flex; gap: 2.5rem; margin-top: 1.75rem; }
 .infoCast { }
-.infoMetaKey { font-size: 0.52rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(245,240,232,0.3); margin-bottom: 0.3rem; }
+.infoMetaKey { font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(245,240,232,0.3); margin-bottom: 0.3rem; }
 .infoMetaVal { font-size: 0.78rem; color: rgba(245,240,232,0.6); line-height: 1.6; }
 
 .ratingBlock {
-  align-self: flex-end;
+  position: absolute;
+  top: 4rem;
+  right: 3.5rem;
   text-align: right;
 }
 .decoScore {
@@ -127,7 +146,7 @@
   font-size: 3.5rem; font-weight: 300; line-height: 0.9;
   color: rgba(245,240,232,0.9); letter-spacing: -0.04em;
 }
-.decoScoreSub { font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(245,240,232,0.4); margin-top: 0.5rem; }
+.decoScoreSub { font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(245,240,232,0.4); margin-top: 0.5rem; }
 .decoVerdict {
   font-family: var(--font-parisienne), 'Parisienne', cursive;
   font-size: 2rem; color: rgba(245,240,232,0.5);
@@ -146,13 +165,93 @@
 
 /* ─── Responsive ────────────────────────────────────────────────────────── */
 @media (max-width: 1024px) {
-  .featuredContent { padding: 4rem 2.5rem; gap: 2.5rem; }
+  .featuredContent { gap: 0; }
+  .featuredLeft { padding: 5rem 2rem 3rem 2.5rem; }
+  .featuredRight { padding: 5rem 2.5rem 3rem; }
+  .ratingBlock { top: 2rem; right: 2.5rem; }
   .posterFilmTitle { font-size: clamp(2.8rem, 5vw, 4rem); }
 }
 
 @media (max-width: 768px) {
   .featuredWrap { min-height: auto; }
-  .featuredContent { grid-template-columns: 1fr; padding: 3rem 1.5rem; gap: 2rem; }
-  .posterFilmTitle { font-size: clamp(2.5rem, 9vw, 3.5rem); }
-  .featuredRight { padding: 2rem; }
+  .featuredContent { grid-template-columns: 1fr; gap: 0; }
+
+  /* Background becomes a cinematic banner anchored to the top title area */
+  .bgImage {
+    inset: 0 0 auto 0;
+    height: 340px;
+    transform: none;
+    opacity: 1;
+    background-size: cover;
+    background-position: center 25%;
+    background-repeat: no-repeat;
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 88%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 88%, transparent 100%);
+  }
+
+  /* Left panel: title sits high so the dancers below remain visible */
+  .featuredLeft {
+    padding: 2.5rem 1.5rem 2.5rem;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+    min-height: 340px;
+  }
+  .posterFilmTitle {
+    transform: rotate(0deg);
+    transform-origin: center;
+    text-align: center;
+    font-size: clamp(2.8rem, 13vw, 4.2rem);
+    line-height: 1;
+    margin-bottom: 0;
+  }
+  .titleOutline { -webkit-text-stroke-width: 1px; }
+
+  /* Right panel: continuous flow, no side border, generous breathing room */
+  .featuredRight {
+    padding: 2.5rem 1.5rem 3rem;
+    border-left: none;
+    border-top: 1px solid rgba(245,240,232,0.12);
+    gap: 1.1rem;
+    align-items: center;
+  }
+
+  /* Rating as a centered inline badge above the label */
+  .ratingBlock {
+    position: static;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.7rem;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+  .decoScore { font-size: 2.4rem; }
+  .decoScoreSub { display: none; }
+  .decoVerdict { font-size: 1.6rem; margin-top: 0; }
+
+  .infoLabel { justify-content: center; font-size: 0.78rem; letter-spacing: 0.22em; }
+  .infoQuote {
+    font-size: 1.25rem; line-height: 1.65;
+    text-align: left; align-self: stretch;
+  }
+
+  /* Meta in a clean 2-column grid instead of a cramped wrap */
+  .infoMeta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.4rem 1rem;
+    margin-top: 1.25rem;
+    align-self: stretch;
+  }
+  .infoBtn { align-self: center; margin-top: 1.75rem; }
+}
+
+@media (max-width: 480px) {
+  .featuredLeft { min-height: 290px; padding: 2.25rem 1.25rem 2rem; }
+  .bgImage { height: 290px; }
+  .posterFilmTitle { font-size: clamp(2.5rem, 14vw, 3.6rem); }
+  .infoQuote { font-size: 1.15rem; }
+  .decoScore { font-size: 2.1rem; }
+  .decoVerdict { font-size: 1.4rem; }
 }

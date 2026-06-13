@@ -86,7 +86,6 @@ export default function Header() {
               <SearchIcon />
             </button>
           </div>
-          <Link href="/signin" className={`${styles.navLink} ${styles.navPill}`}>Sign in</Link>
         </nav>
 
         <button
@@ -111,7 +110,6 @@ export default function Header() {
         <Link href="/essays"  className={styles.mobileNavLink} onClick={() => setMenuOpen(false)}>Essays</Link>
         <Link href="/lists"   className={styles.mobileNavLink} onClick={() => setMenuOpen(false)}>Lists</Link>
         <Link href="/about"   className={styles.mobileNavLink} onClick={() => setMenuOpen(false)}>About</Link>
-        <Link href="/signin"  className={styles.mobileNavPill} onClick={() => setMenuOpen(false)}>Sign in</Link>
         <div className={styles.mobileNavSocials}>
           <a href="https://github.com/shkeir-ali" title="GitHub" target="_blank" rel="noopener noreferrer"><GithubIcon /></a>
           <a href="https://www.linkedin.com/in/ali-shkeir" title="LinkedIn" target="_blank" rel="noopener noreferrer"><LinkedInIcon /></a>

@@ -35,6 +35,31 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: 'Ali Shkeir — Cinema',
   description: 'Honest reviews, personal essays, and curated lists — from a film obsessive who believes every frame tells a story.',
+  metadataBase: new URL('https://alishkeir.com'),
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: 'Ali Shkeir — Cinema',
+    description: 'Honest reviews, personal essays, and curated lists — from a film obsessive who believes every frame tells a story.',
+    url: 'https://alishkeir.com',
+    siteName: 'Ali Shkeir — Cinema',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Ali Shkeir — Film Criticism & Essays',
+      },
+    ],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Ali Shkeir — Cinema',
+    description: 'Honest reviews, personal essays, and curated lists — from a film obsessive who believes every frame tells a story.',
+    images: ['/og-image.jpg'],
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

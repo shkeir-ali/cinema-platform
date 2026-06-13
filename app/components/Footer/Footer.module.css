@@ -1,8 +1,15 @@
 /* ─── Footer ────────────────────────────────────────────────────────────── */
 .footer {
   border-top: 1px solid rgba(28,26,24,0.07);
-  padding: 2rem 3.5rem;
-  display: flex; justify-content: space-between; align-items: center;
+  padding: 2.5rem 3.5rem;
+  display: flex; flex-direction: column; align-items: center; gap: 1.5rem;
+}
+.tagline {
+  font-size: 0.72rem; color: var(--muted); letter-spacing: 0.06em;
+  text-align: center; opacity: 0.6;
+}
+.bottom {
+  width: 100%; display: flex; justify-content: space-between; align-items: center;
 }
 .copy { font-size: 0.65rem; color: var(--muted); letter-spacing: 0.05em; }
 .nav { display: flex; gap: 2rem; }
@@ -21,7 +28,8 @@
   .footer { padding: 1.75rem 2rem; }
 }
 @media (max-width: 768px) {
-  .footer { flex-direction: column; align-items: center; gap: 1.25rem; text-align: center; padding: 2rem 1.5rem; }
+  .footer { padding: 2rem 1.5rem; gap: 1.25rem; }
+  .bottom { flex-direction: column; align-items: center; gap: 1rem; }
   .nav { flex-wrap: wrap; justify-content: center; gap: 1rem; }
   .socials { justify-content: center; }
 }
