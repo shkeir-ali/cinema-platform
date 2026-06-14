@@ -17,15 +17,17 @@ async function main() {
     {
       tmdbId: 49026,
       title: 'La La Land',
+      // Per-film title art direction (extracted from the design prototype):
+      // "La La" in twilight purple, "Land" in gold — matching the film's poster.
       titleDisplay: [
-        { text: 'La La' },
-        { text: 'Land', style: { fontStyle: 'italic', color: 'rgba(245,240,232,0.45)', display: 'block' } },
+        { text: 'La La ', style: { color: '#8f5fd4', textShadow: '0 2px 12px rgba(0,0,0,0.15)' } },
+        { text: 'Land', style: { color: '#d4a82a', textShadow: '0 2px 12px rgba(0,0,0,0.15)' } },
       ],
       slug: 'la-la-land',
       director: 'Damien Chazelle',
       cast: 'Ryan Gosling, Emma Stone, John Legend',
       posterPath: '/uDO8zWDhfWwoFdKS4fzkUJt0Rf0.jpg',
-      backdropPath: '/nadTGFoTRFJfG63P7F7cRTWs4S.jpg',
+      backdropPath: '/tkBx8aYZ0DVRWSXeEzyVDP6oUBA.jpg',
       releaseYear: 2016,
       genres: ['Romance', 'Musical'],
       tags: ['melancholy', 'ambition', 'jazz', 'los angeles'],
@@ -138,7 +140,7 @@ async function main() {
       published: true,
     },
     {
-      tmdbId: 227306,
+      tmdbId: 62,
       title: '2001: A Space Odyssey',
       slug: '2001-a-space-odyssey',
       director: 'Stanley Kubrick',

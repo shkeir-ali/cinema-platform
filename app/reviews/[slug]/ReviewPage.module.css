@@ -1,0 +1,396 @@
+/* ─── Single Review page ────────────────────────────────────────────────── */
+
+/* ── Animations ───────────────────────────────────────────────────────────── */
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes cardFadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes starShimmer {
+  0%   { transform: scale(1);    filter: brightness(1); }
+  50%  { transform: scale(1.28); filter: brightness(1.8) drop-shadow(0 0 6px rgba(192,145,55,0.9)); }
+  100% { transform: scale(1);    filter: brightness(1); }
+}
+
+/* ── HERO ─────────────────────────────────────────────────────────────────
+   Full-viewport cinematic header. Backdrop comes from the DB (backdropPath);
+   when absent we fall back to the dark gradient used by FeaturedReview.      */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  background: #12100e; /* always-dark base so text is readable if image 404s */
+}
+
+.heroBackdrop {
+  position: absolute; inset: 0;
+  background-position: center 25%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: brightness(0.5) saturate(0.75);
+}
+/* Fallback when the DB has no backdropPath */
+.heroBackdrop[data-fallback] {
+  background: linear-gradient(160deg, #130d20 0%, #1e1030 30%, #2a1040 60%, #180820 100%);
+  filter: none;
+}
+
+.heroFade {
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0)    0%,
+    rgba(0,0,0,0)   40%,
+    rgba(0,0,0,0.55) 70%,
+    rgba(0,0,0,0.75) 85%,
+    rgba(0,0,0,0.85) 100%
+  );
+}
+
+/* Oxblood signature bar across the very top */
+.heroAccentBar {
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: var(--rose);
+  z-index: 3;
+}
+
+.heroContent {
+  position: relative; z-index: 2;
+  padding: 0 3.5rem 4.5rem;
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 3.5rem;
+  align-items: flex-end;
+  max-width: 1200px;
+}
+
+/* Logo mode — single column, no poster */
+.heroContentLogo {
+  position: relative; z-index: 2;
+  padding: 0 3.5rem 4.5rem;
+  max-width: 1200px;
+}
+
+.heroPoster {
+  border-radius: 6px; overflow: hidden;
+  box-shadow: 0 32px 80px rgba(26,21,16,0.35), 0 4px 16px rgba(26,21,16,0.15);
+  animation: heroFadeUp 1.1s cubic-bezier(0.2, 0.8, 0.4, 1) 0.15s both;
+}
+.heroPoster img { width: 100%; display: block; }
+
+.heroInfo { padding-bottom: 0.5rem; }
+
+/* TMDB official title logo (transparent PNG). Shown instead of .heroTitle
+   when the DB has a logoPath. drop-shadow lifts it off the dark backdrop. */
+.heroLogo {
+  max-width: min(380px, 90%);
+  max-height: clamp(160px, 16vw, 210px);
+  width: auto;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 2px 24px rgba(0,0,0,0.55));
+  margin-bottom: 1.5rem;
+  animation: heroFadeUp 1.1s cubic-bezier(0.2, 0.8, 0.4, 1) 0.3s both;
+}
+
+/* Script treatment (Great Vibes — matches the design prototype). Per-word
+   colours/shadows come from the DB titleDisplay JSON (e.g. La La Land's purple
+   + gold), so each film's title is art-directed to its own poster. Falls back
+   to cream for films with no titleDisplay. */
+.heroTitle {
+  font-family: var(--font-great-vibes), 'Great Vibes', cursive;
+  font-weight: 400;
+  font-size: clamp(4rem, 7.5vw, 7rem);
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+  color: #f5f0e8;
+  margin-bottom: 1.5rem;
+  animation: heroFadeUp 1.1s cubic-bezier(0.2, 0.8, 0.4, 1) 0.3s both;
+}
+
+/* Neutral fallback: no titleDisplay, no TMDB logo (e.g. Mulholland Drive) */
+.heroTitlePlain {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: #f5f0e8;
+  margin-bottom: 1.5rem;
+  animation: heroFadeUp 1.1s cubic-bezier(0.2, 0.8, 0.4, 1) 0.3s both;
+}
+
+.heroDirector {
+  font-family: var(--font-inter), 'Inter', sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(245,240,232,0.78);
+  margin-bottom: 1.5rem;
+  animation: heroFadeUp 1s cubic-bezier(0.2, 0.8, 0.4, 1) 0.65s both;
+}
+
+.heroDot {
+  opacity: 0.5;
+  margin: 0 0.25em;
+}
+
+/* ── BODY + SIDEBAR ───────────────────────────────────────────────────── */
+.bodyWrap {
+  max-width: 1100px; margin: 0 auto;
+  padding: 4rem 3.5rem 0;
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.reviewLede {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: 1.45rem; font-style: italic;
+  color: var(--text); line-height: 1.65;
+  padding-left: 1.5rem;
+  border-left: 2px solid var(--rose);
+  margin-bottom: 2.5rem;
+}
+.reviewText {
+  font-family: var(--font-inter), 'Inter', sans-serif;
+  font-size: 0.93rem; line-height: 1.95;
+  color: rgba(28,26,24,0.68);
+}
+.reviewText p + p { margin-top: 1.5em; }
+.reviewText em { color: var(--text); }
+
+/* ── SIDEBAR ──────────────────────────────────────────────────────────── */
+.sidebar { padding-top: 0.25rem; }
+
+.scoreBlock {
+  background: var(--surface);
+  border: 1px solid rgba(28,26,24,0.1);
+  border-radius: 8px; padding: 1.5rem;
+  text-align: center; margin-bottom: 2.25rem;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.7s ease, transform 0.7s ease, background 1s ease, border-color 1s ease;
+}
+.scoreBlockVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.scoreBlockMasterpiece {
+  background: rgba(192,145,55,0.06);
+  border-color: rgba(192,145,55,0.35);
+}
+.scoreNumber {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: 4rem; font-weight: 300;
+  color: var(--amber); line-height: 1; margin-bottom: 0.2rem;
+}
+.scoreOutOf {
+  font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 0.9rem;
+}
+.scoreStars { display: flex; justify-content: center; gap: 3px; color: var(--amber); }
+.scoreStars svg { width: 14px; height: 14px; display: block; }
+
+/* Perfect score — star shimmer sweeps left to right */
+.starsShimmer svg { animation: starShimmer 0.48s ease-in-out both; }
+.starsShimmer svg:nth-child(1) { animation-delay:   0ms; }
+.starsShimmer svg:nth-child(2) { animation-delay:  75ms; }
+.starsShimmer svg:nth-child(3) { animation-delay: 150ms; }
+.starsShimmer svg:nth-child(4) { animation-delay: 225ms; }
+.starsShimmer svg:nth-child(5) { animation-delay: 300ms; }
+
+/* Subtle amber glow on the number once stars finish */
+.scoreNumberPerfect {
+  text-shadow: 0 0 28px rgba(192,145,55,0.5);
+  transition: text-shadow 0.9s ease;
+}
+
+/* "Masterpiece" label — fades in after the shimmer */
+.masterpieceLabel {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: 0.88rem;
+  font-style: italic;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-top: 0.85rem;
+  opacity: 0;
+  transform: translateY(5px);
+  transition: opacity 0.8s ease 0.55s, transform 0.8s ease 0.55s;
+}
+.masterpieceLabelVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.sidebarBlock { margin-bottom: 0; }
+.sidebarLabel {
+  font-size: 0.63rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 0.5rem;
+}
+.sidebarValue { font-size: 0.88rem; color: var(--text); line-height: 1.6; }
+.sidebarRule { border: none; border-top: 1px solid rgba(28,26,24,0.1); margin: 1.75rem 0; }
+
+.castList { list-style: none; display: flex; flex-direction: column; gap: 0.35rem; }
+.castList li {
+  font-size: 0.84rem; color: rgba(28,26,24,0.6);
+  padding-left: 1rem; position: relative;
+}
+.castList li::before {
+  content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+  width: 5px; height: 1px; background: var(--rose); opacity: 0.7;
+}
+
+.pills { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+.pill {
+  font-size: 0.66rem; letter-spacing: 0.07em; text-transform: uppercase;
+  padding: 0.28rem 0.7rem; border-radius: 99px;
+  border: 1px solid rgba(28,26,24,0.12); color: var(--muted);
+}
+.pillMuted { text-transform: none; letter-spacing: 0.02em; }
+
+/* ── MORE REVIEWS ─────────────────────────────────────────────────────── */
+.moreSection {
+  max-width: 1100px; margin: 0 auto;
+  padding: 5rem 3.5rem 6rem;
+}
+.moreHeader {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 2rem;
+}
+.moreTitle {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: 1.6rem; font-weight: 400;
+}
+.moreLink {
+  font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); text-decoration: none;
+}
+.moreLink:hover { color: var(--text); }
+
+.moreGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+
+/* Staggered card reveal — only active when JS sets data-ready */
+.moreGrid[data-ready] .moreCard { opacity: 0; }
+.moreGridVisible .moreCard {
+  animation: cardFadeUp 0.55s cubic-bezier(0.2, 0.8, 0.4, 1) both;
+}
+.moreGridVisible .moreCard:nth-child(1) { animation-delay:   0ms; }
+.moreGridVisible .moreCard:nth-child(2) { animation-delay:  90ms; }
+.moreGridVisible .moreCard:nth-child(3) { animation-delay: 180ms; }
+.moreGridVisible .moreCard:nth-child(4) { animation-delay: 270ms; }
+.moreCard { text-decoration: none; display: block; color: inherit; }
+.moreCardImg {
+  aspect-ratio: 2 / 3; border-radius: 5px; overflow: hidden;
+  margin-bottom: 0.75rem; background: var(--surface);
+}
+.moreCardImg img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.35s ease, filter 0.35s ease;
+  filter: brightness(0.95);
+}
+.moreCard:hover .moreCardImg img { transform: scale(1.04); filter: brightness(1.05); }
+.moreCardTitle {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: 1rem; font-weight: 400; line-height: 1.2;
+  color: var(--text); margin-bottom: 0.2rem;
+}
+.moreCardMeta { font-size: 0.71rem; color: var(--muted); }
+
+/* ─── Responsive ────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .heroContent { padding: 0 2rem 3.5rem; grid-template-columns: 170px 1fr; gap: 2.5rem; }
+  .heroContentLogo { padding: 0 2rem 3.5rem; }
+  .bodyWrap { padding: 3.5rem 2rem 0; gap: 3rem; }
+  .moreSection { padding: 4rem 2rem 5rem; }
+  .moreGrid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 768px) {
+  /* Hero */
+  .hero { min-height: 80vh; }
+  .heroContent {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+    padding: 0 1.5rem 3rem;
+  }
+  .heroContentLogo { padding: 0 1.5rem 3rem; }
+  .heroPoster { width: 140px; }
+  .heroTitle { font-size: clamp(2.8rem, 12vw, 4rem); }
+
+  /* Body */
+  .bodyWrap { grid-template-columns: 1fr; padding: 2.5rem 1.25rem 0; gap: 0; }
+  .reviewLede { font-size: 1.2rem; line-height: 1.6; }
+  .reviewText { font-size: 1rem; line-height: 1.85; }
+
+  /* Sidebar stacks below article — add a top border as a visual divider */
+  .sidebar {
+    padding-top: 2.5rem;
+    margin-top: 2.5rem;
+    border-top: 1px solid rgba(28,26,24,0.1);
+  }
+
+  /* Score block: number on the left, label + stars stacked on the right */
+  .scoreBlock {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 1.25rem;
+    text-align: left;
+    padding: 1.25rem 1.5rem;
+  }
+  .scoreNumber {
+    grid-column: 1;
+    grid-row: 1 / -1; /* always spans all rows, even when masterpiece adds a 3rd */
+    font-size: 4rem;
+    line-height: 1;
+    margin-bottom: 0;
+    align-self: center;
+  }
+  .scoreOutOf {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: flex-end;
+    margin-bottom: 0.35rem;
+  }
+  .scoreStars {
+    grid-column: 2;
+    grid-row: 2;
+    justify-content: flex-start;
+  }
+  .masterpieceLabel {
+    grid-column: 2;
+    grid-row: 3;
+    margin-top: 0.4rem;
+  }
+
+  /* More reviews */
+  .moreSection { padding: 3rem 1.25rem 4rem; }
+  .moreGrid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .moreCardTitle { font-size: 0.95rem; }
+  .moreCardMeta { font-size: 0.69rem; }
+}
+
+@media (max-width: 480px) {
+  .heroLogo {
+    max-width: min(80vw, 300px);
+    max-height: clamp(80px, 21vw, 130px);
+  }
+  .heroTitle { font-size: clamp(2.4rem, 13vw, 3.4rem); }
+  .scoreNumber { font-size: 3.6rem; }
+  .bodyWrap { padding: 2rem 1rem 0; }
+  .moreSection { padding: 2.5rem 1rem 3.5rem; }
+}

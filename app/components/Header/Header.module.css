@@ -3,9 +3,36 @@
   display: flex; justify-content: space-between; align-items: center;
   padding: 1.5rem 3.5rem;
   position: sticky; top: 0; z-index: 100;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition: background 0.4s ease, backdrop-filter 0.4s ease, border-color 0.4s ease;
+}
+/* Overlay mode (pages with a dark hero): take the header out of flow so the
+   hero starts at the true top of the viewport — no negative-margin guesswork. */
+.overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+}
+
+/* Solid translucent bar once the page is scrolled past the hero */
+.scrolled {
   background: rgba(245,240,232,0.82);
   backdrop-filter: blur(20px);
+  border-bottom-color: rgba(28,26,24,0.07);
 }
+
+/* Transparent state sitting over a dark hero backdrop — flip text to cream.
+   (Only applied while not scrolled; .scrolled wins back the parchment look.) */
+.overDark .logoMark { color: #f5f0e8; }
+.overDark .logoName { color: #f5f0e8; }
+.overDark .logoTag  { color: var(--amber); }
+.overDark .navLink  { color: rgba(245,240,232,0.7); }
+.overDark .navLink:hover { color: #fff; }
+.overDark .searchBtn { color: rgba(245,240,232,0.7); }
+.overDark .searchBtn:hover { color: #fff; }
+.overDark .searchField { color: #f5f0e8; border-bottom-color: rgba(245,240,232,0.5); }
+.overDark .searchField::placeholder { color: rgba(245,240,232,0.6); }
+.overDark .hamburger span { background: #f5f0e8; }
 
 /* Logo */
 .logo {

@@ -28,10 +28,18 @@ const SearchIcon = () => (
   </svg>
 )
 
-export default function Header() {
+export default function Header({ overDark = false }: { overDark?: boolean }) {
   const [menuOpen, setMenuOpen]   = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
+  const [scrolled, setScrolled]   = useState(false)
   const searchRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    function onScroll() { setScrolled(window.scrollY > 80) }
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   function toggleSearch() {
     if (!searchOpen) {
@@ -63,7 +71,7 @@ export default function Header() {
 
   return (
     <>
-      <header className={styles.header}>
+      <header className={`${styles.header} ${overDark ? styles.overlay : ''} ${scrolled || menuOpen ? styles.scrolled : ''} ${overDark && !scrolled && !menuOpen ? styles.overDark : ''}`}>
         <Link href="/" className={styles.logo} aria-label="Ali Shkeir — Film Journal">
           <svg className={styles.logoMark} viewBox="0 0 24 24" fill="none"
                stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

@@ -73,11 +73,14 @@ function buildMiniReel(
 
 export default function Hero() {
   useEffect(() => {
-    // Build reel windows
+    let cancelled = false
+    let rafId: number | undefined
+
+    // Clear before building — prevents segment duplication on re-mount (soft nav)
     const reel1 = document.getElementById('camReel1Windows')
     const reel2 = document.getElementById('camReel2Windows')
-    if (reel1) buildMiniReel(reel1, 95, 78, 29)
-    if (reel2) buildMiniReel(reel2, 162, 78, 29)
+    if (reel1) { reel1.innerHTML = ''; buildMiniReel(reel1, 95, 78, 29) }
+    if (reel2) { reel2.innerHTML = ''; buildMiniReel(reel2, 162, 78, 29) }
 
     // Camera light cone
     const camera = document.getElementById('filmCamera')
@@ -145,7 +148,7 @@ export default function Hero() {
     }
 
     async function runStartup() {
-      await wait(800)
+      await wait(800); if (cancelled) return
 
       // Phase 1: type "Writing about"
       if (preEl) {
@@ -157,24 +160,24 @@ export default function Hero() {
 
         const preWord = 'Writing about'
         for (let i = 0; i < preWord.length; i++) {
-          await wait(175)
+          await wait(175); if (cancelled) return
           preText.data += preWord[i]
         }
 
-        await wait(400)
+        await wait(400); if (cancelled) return
         preCursor.style.animation = 'none'
         preCursor.style.transition = 'opacity 0.3s ease'
         preCursor.style.opacity = '0'
-        await wait(320)
+        await wait(320); if (cancelled) return
         preCursor.remove()
       }
 
       // Phase 2: pause, then light flicker blink sequence
-      await wait(1000)
+      await wait(1000); if (cancelled) return
       const blinks = [90, 130, 70, 200, 110, 90, 160, 70, 90, 300]
       for (let i = 0; i < blinks.length; i++) {
         setLight(i % 2 === 0)
-        await wait(blinks[i])
+        await wait(blinks[i]); if (cancelled) return
       }
 
       // Settle on — light reveals "cinema."
@@ -205,6 +208,7 @@ export default function Hero() {
       const start = performance.now()
 
       function tick(now: number) {
+        if (cancelled) return
         const elapsed = now - start
         const t = Math.min(elapsed / duration, 1)
         const eased = easeOutExpo(t)
@@ -214,16 +218,16 @@ export default function Hero() {
           el.textContent = formatStatNum(eased * target, target)
         })
 
-        if (t < 1) requestAnimationFrame(tick)
+        if (t < 1) rafId = requestAnimationFrame(tick)
         else statEls.forEach((el, i) => {
           el.textContent = formatStatNum(statTargets[i] ?? 0, statTargets[i] ?? 0)
         })
       }
 
-      requestAnimationFrame(tick)
+      rafId = requestAnimationFrame(tick)
     }
 
-    runStartup().then(animateStats)
+    runStartup().then(() => { if (!cancelled) animateStats() })
 
     async function handleCameraClick() {
       if (!sequenceDone) return
@@ -279,6 +283,8 @@ export default function Hero() {
     handleMq(mq)
 
     return () => {
+      cancelled = true
+      if (rafId !== undefined) cancelAnimationFrame(rafId)
       camera.removeEventListener('click', handleCameraClick)
       mq.removeEventListener(
         'change',

@@ -30,6 +30,7 @@ model Review {
   cast         String?
   posterPath   String
   backdropPath String?
+  logoPath     String?
   releaseYear  Int
   genres       String[]
   tags         String[]

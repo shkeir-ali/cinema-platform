@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Cormorant_Garamond, Inter, Parisienne, Poiret_One } from 'next/font/google'
+import { Cormorant_Garamond, Inter, Parisienne, Poiret_One, Great_Vibes } from 'next/font/google'
 import SectionObserver from './components/SectionObserver'
 import './globals.css'
 
@@ -12,6 +12,14 @@ const poiretOne = Poiret_One({
 
 const parisienne = Parisienne({
   variable: '--font-parisienne',
+  subsets: ['latin'],
+  weight: ['400'],
+  display: 'swap',
+})
+
+// Script face for review-page film titles (matches the design prototype)
+const greatVibes = Great_Vibes({
+  variable: '--font-great-vibes',
   subsets: ['latin'],
   weight: ['400'],
   display: 'swap',
@@ -64,7 +72,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${inter.variable} ${parisienne.variable} ${poiretOne.variable}`}>
+    <html lang="en" className={`${cormorant.variable} ${inter.variable} ${parisienne.variable} ${poiretOne.variable} ${greatVibes.variable}`}>
       <body>
         {children}
         <SectionObserver />
