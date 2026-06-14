@@ -1,6 +1,7 @@
 import { PrismaClient } from '../generated/prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'
 import * as dotenv from 'dotenv'
+import { hash } from 'bcryptjs'
 
 dotenv.config({ path: '.env.local' })
 
@@ -8,6 +9,24 @@ const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! })
 const prisma = new PrismaClient({ adapter })
 
 async function main() {
+  // ── Admin user ──────────────────────────────────────────────────────────────
+  const adminEmail = process.env.ADMIN_EMAIL
+  const adminPassword = process.env.ADMIN_PASSWORD
+
+  if (!adminEmail || !adminPassword) {
+    throw new Error('ADMIN_EMAIL and ADMIN_PASSWORD must be set in .env.local')
+  }
+
+  const hashedPassword = await hash(adminPassword, 12)
+
+  await prisma.user.upsert({
+    where: { email: adminEmail },
+    update: { password: hashedPassword, role: 'ADMIN' },
+    create: { email: adminEmail, password: hashedPassword, role: 'ADMIN' },
+  })
+
+  console.log(`✓ Admin user seeded: ${adminEmail}`)
+
   // Clear existing data so re-seeding always reflects the latest values
   await prisma.post.deleteMany()
   await prisma.review.deleteMany()

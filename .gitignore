@@ -48,3 +48,4 @@ CLAUDE.md
 .claude/
 *.md
 !README.md
+prisma/dev.db
