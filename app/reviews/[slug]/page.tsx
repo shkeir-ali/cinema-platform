@@ -6,7 +6,9 @@ import Header from '@/app/components/Header'
 import Footer from '@/app/components/Footer'
 import Newsletter from '@/app/components/Newsletter'
 import ScoreBlock from './ScoreBlock'
+import HeroLogo from './HeroLogo'
 import MoreReviewsReveal from './MoreReviewsReveal'
+import PosterImage from '@/app/components/PosterImage'
 import styles from './ReviewPage.module.css'
 
 const TMDB_ORIGINAL = 'https://image.tmdb.org/t/p/original'
@@ -122,9 +124,10 @@ export default async function ReviewPage(
 
           <div className={styles.heroContentLogo}>
             {!review.titleDisplay && review.logoPath ? (
-              <img
+              <HeroLogo
                 src={`${TMDB_ORIGINAL}${review.logoPath}`}
                 alt={review.title}
+                titleDisplay={null}
                 className={styles.heroLogo}
               />
             ) : review.titleDisplay ? (
@@ -204,7 +207,7 @@ export default async function ReviewPage(
               {moreReviews.map(r => (
                 <Link key={r.slug} href={`/reviews/${r.slug}`} className={styles.moreCard}>
                   <div className={styles.moreCardImg}>
-                    <img src={`${TMDB_W500}${r.posterPath}`} alt={r.title} loading="lazy" />
+                    <PosterImage src={`${TMDB_W500}${r.posterPath}`} alt={r.title} genre={r.genres[0]} loading="lazy" />
                   </div>
                   <div className={styles.moreCardTitle}>{r.title}</div>
                   <div className={styles.moreCardMeta}>{r.genres[0] && `${r.genres[0]} · `}{r.director} · {r.releaseYear}</div>

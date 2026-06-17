@@ -5,7 +5,9 @@ import { db } from '@/lib/db'
 import Footer from '@/app/components/Footer'
 import Newsletter from '@/app/components/Newsletter'
 import ScoreBlock from '@/app/reviews/[slug]/ScoreBlock'
+import HeroLogo from '@/app/reviews/[slug]/HeroLogo'
 import MoreReviewsReveal from '@/app/reviews/[slug]/MoreReviewsReveal'
+import PosterImage from '@/app/components/PosterImage'
 import styles from '@/app/reviews/[slug]/ReviewPage.module.css'
 import PreviewRefresher from '@/app/preview/PreviewRefresher'
 
@@ -143,9 +145,10 @@ export default async function PreviewPage({ params }: { params: Promise<{ token:
 
           <div className={styles.heroContentLogo}>
             {!review.titleDisplay && review.logoPath ? (
-              <img
+              <HeroLogo
                 src={`${TMDB_ORIGINAL}${review.logoPath}`}
                 alt={review.title}
+                titleDisplay={null}
                 className={styles.heroLogo}
               />
             ) : review.titleDisplay ? (
@@ -223,7 +226,7 @@ export default async function PreviewPage({ params }: { params: Promise<{ token:
               {moreReviews.map(r => (
                 <Link key={r.slug} href={`/reviews/${r.slug}`} className={styles.moreCard}>
                   <div className={styles.moreCardImg}>
-                    <img src={`${TMDB_W500}${r.posterPath}`} alt={r.title} loading="lazy" />
+                    <PosterImage src={`${TMDB_W500}${r.posterPath}`} alt={r.title} genre={r.genres[0]} loading="lazy" />
                   </div>
                   <div className={styles.moreCardTitle}>{r.title}</div>
                   <div className={styles.moreCardMeta}>{r.genres[0] && `${r.genres[0]} · `}{r.director} · {r.releaseYear}</div>

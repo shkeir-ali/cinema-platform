@@ -329,6 +329,7 @@
 .moreGridVisible .moreCard:nth-child(4) { animation-delay: 270ms; }
 .moreCard { text-decoration: none; display: block; color: inherit; }
 .moreCardImg {
+  position: relative;
   aspect-ratio: 2 / 3; border-radius: 5px; overflow: hidden;
   margin-bottom: 0.75rem; background: var(--surface);
 }

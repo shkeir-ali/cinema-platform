@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import Link from 'next/link'
+import PosterImage from '@/app/components/PosterImage'
 import styles from './LatestReviews.module.css'
 
 const TMDB_IMG = 'https://image.tmdb.org/t/p/w500'
@@ -130,7 +131,7 @@ export default function LatestReviewsCarousel({ reviews }: { reviews: Review[] }
           <Link key={r.slug} href={`/reviews/${r.slug}`} className={styles.reviewCard}>
             <div className={styles.cardPoster}>
               <div className={styles.cardPosterBg} />
-              <img className={styles.cardPosterImg} src={`${TMDB_IMG}${r.posterPath}`} alt={r.title} loading="lazy" />
+              <PosterImage className={styles.cardPosterImg} src={`${TMDB_IMG}${r.posterPath}`} alt={r.title} genre={r.genres[0]} loading="lazy" />
               <div className={styles.cardPosterOverlay}>
                 <span className={styles.cardOverlayArrow}>→</span>
               </div>
