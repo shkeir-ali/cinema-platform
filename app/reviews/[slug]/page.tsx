@@ -28,6 +28,17 @@ function renderTitle(titleDisplay: unknown, fallback: string) {
 }
 
 
+function renderBody(content: string, className: string) {
+  if (content.trimStart().startsWith('<')) {
+    return <div dangerouslySetInnerHTML={{ __html: content }} className={className} />
+  }
+  return (
+    <div className={className}>
+      {content.split(/\n\n+/).map((p, i) => <p key={i}>{p.trim()}</p>)}
+    </div>
+  )
+}
+
 async function getReview(slug: string) {
   return db.review.findFirst({ where: { slug, published: true } })
 }
@@ -64,7 +75,6 @@ export default async function ReviewPage(
 
   const backdropUrl = review.backdropPath ? `${TMDB_ORIGINAL}${review.backdropPath}` : null
   const cast = review.cast?.split(',').map(s => s.trim()).filter(Boolean) ?? []
-  const paragraphs = review.myReview.split(/\n\n+/).map(p => p.trim()).filter(Boolean)
 
   const moreReviews = await db.review.findMany({
     where: { published: true, slug: { not: review.slug } },
@@ -111,9 +121,7 @@ export default async function ReviewPage(
         <div className={styles.bodyWrap}>
           <article>
             {review.excerpt && <p className={styles.reviewLede}>{review.excerpt}</p>}
-            <div className={styles.reviewText}>
-              {paragraphs.map((p, i) => <p key={i}>{p}</p>)}
-            </div>
+            {renderBody(review.myReview, styles.reviewText)}
           </article>
 
           <aside className={styles.sidebar}>

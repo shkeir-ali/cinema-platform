@@ -1,9 +1,10 @@
 'use client'
 
-import { useActionState, useEffect, useRef, useState } from 'react'
+import { useActionState, useCallback, useEffect, useRef, useState } from 'react'
 import type { Review } from '@/generated/prisma/client'
 import AssetPicker from './AssetPicker'
 import PreviewLink from './PreviewLink'
+import RichTextEditor from './RichTextEditor'
 import { saveDraft, clearDraft } from '../actions'
 
 type Props = {
@@ -27,12 +28,28 @@ export default function ReviewForm({ action, review, tmdbDefaults }: Props) {
   const timerRef   = useRef<ReturnType<typeof setTimeout>>()
   const channelRef = useRef<BroadcastChannel | null>(null)
   const [draftStatus, setDraftStatus] = useState<'idle' | 'pending' | 'saved'>('idle')
+  const [reviewHtml, setReviewHtml] = useState(review?.myReview ?? '')
 
   useEffect(() => {
     if (!review?.id) return
     channelRef.current = new BroadcastChannel('cinema-preview')
     return () => { channelRef.current?.close() }
   }, [review?.id])
+
+  const handleHtmlChange = useCallback((html: string) => {
+    setReviewHtml(html)
+    if (!review?.id) return
+    clearTimeout(timerRef.current)
+    setDraftStatus('pending')
+    timerRef.current = setTimeout(async () => {
+      if (!formRef.current) return
+      const fd = new FormData(formRef.current)
+      await saveDraft(undefined, fd)
+      channelRef.current?.postMessage({ type: 'refresh' })
+      setDraftStatus('saved')
+      setTimeout(() => setDraftStatus('idle'), 2000)
+    }, 1200)
+  }, [review?.id]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Native DOM listener — bypasses React synthetic event system for reliability
   useEffect(() => {
@@ -139,7 +156,12 @@ export default function ReviewForm({ action, review, tmdbDefaults }: Props) {
         {/* ── Section: Review ────────────────────────────────────────── */}
         <Section title="Your review">
           <Field label="Excerpt" name="excerpt" multiline rows={2} defaultValue={v.excerpt ?? ''} />
-          <Field label="Review body" name="myReview" multiline rows={12} defaultValue={v.myReview ?? ''} required />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+            <span style={labelText}>Review body<span style={{ color: 'var(--rose)' }}> *</span></span>
+            {/* Controlled hidden input — value driven by reviewHtml state, never reset by re-renders */}
+            <input type="hidden" name="myReview" value={reviewHtml} onChange={() => {}} />
+            <RichTextEditor defaultValue={v.myReview ?? ''} onHtmlChange={handleHtmlChange} />
+          </div>
           <Field label="Rating (0.5 – 5)" name="myRating" type="number" inputProps={{ min: '0.5', max: '5', step: '0.5' }} defaultValue={String(v.myRating ?? '')} required style={{ maxWidth: 140 }} />
         </Section>
 
@@ -164,9 +186,9 @@ export default function ReviewForm({ action, review, tmdbDefaults }: Props) {
           </button>
           <button
             type="button"
-            onClick={async () => {
+            onClick={() => {
               clearTimeout(timerRef.current)
-              if (v.id) await clearDraft(v.id)
+              if (v.id) clearDraft(v.id).catch(() => {})
               channelRef.current?.postMessage({ type: 'refresh' })
               window.location.href = '/admin/reviews'
             }}

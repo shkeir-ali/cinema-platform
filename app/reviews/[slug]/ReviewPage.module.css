@@ -171,6 +171,41 @@
 }
 .reviewText p + p { margin-top: 1.5em; }
 .reviewText em { color: var(--text); }
+.reviewText strong { color: var(--text); font-weight: 600; }
+.reviewText u { text-underline-offset: 3px; }
+
+.reviewText h2 {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: 1.45rem; font-weight: 400;
+  color: var(--text);
+  margin: 2em 0 0.6em;
+  line-height: 1.25;
+}
+.reviewText h3 {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: 1.15rem; font-weight: 400; font-style: italic;
+  color: var(--text);
+  margin: 1.75em 0 0.5em;
+  line-height: 1.3;
+}
+
+.reviewText blockquote {
+  border-left: 2px solid var(--rose);
+  margin: 1.75em 0;
+  padding: 0.25em 0 0.25em 1.25em;
+  font-style: italic;
+  color: rgba(28,26,24,0.75);
+}
+.reviewText blockquote p { margin: 0; }
+
+.reviewText ul,
+.reviewText ol {
+  margin: 1em 0;
+  padding-left: 1.5em;
+}
+.reviewText ul { list-style: disc; }
+.reviewText ol { list-style: decimal; }
+.reviewText li + li { margin-top: 0.35em; }
 
 /* ── SIDEBAR ──────────────────────────────────────────────────────────── */
 .sidebar { padding-top: 0.25rem; }

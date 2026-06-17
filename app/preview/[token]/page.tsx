@@ -18,6 +18,17 @@ const TMDB_W500     = 'https://image.tmdb.org/t/p/w500'
 
 type TitleToken = { text: string; style?: React.CSSProperties }
 
+function renderBody(content: string, className: string) {
+  if (content.trimStart().startsWith('<')) {
+    return <div dangerouslySetInnerHTML={{ __html: content }} className={className} />
+  }
+  return (
+    <div className={className}>
+      {content.split(/\n\n+/).map((p, i) => <p key={i}>{p.trim()}</p>)}
+    </div>
+  )
+}
+
 function renderTitle(titleDisplay: unknown, fallback: string) {
   if (!titleDisplay || !Array.isArray(titleDisplay)) return <>{fallback}</>
   return (
@@ -40,7 +51,6 @@ export default async function PreviewPage({ params }: { params: Promise<{ token:
 
   const backdropUrl = review.backdropPath ? `${TMDB_ORIGINAL}${review.backdropPath}` : null
   const cast = review.cast?.split(',').map(s => s.trim()).filter(Boolean) ?? []
-  const paragraphs = review.myReview.split(/\n\n+/).map(p => p.trim()).filter(Boolean)
 
   const moreReviews = await db.review.findMany({
     where: { published: true, slug: { not: review.slug } },
@@ -128,9 +138,7 @@ export default async function PreviewPage({ params }: { params: Promise<{ token:
         <div className={styles.bodyWrap}>
           <article>
             {review.excerpt && <p className={styles.reviewLede}>{review.excerpt}</p>}
-            <div className={styles.reviewText}>
-              {paragraphs.map((p, i) => <p key={i}>{p}</p>)}
-            </div>
+            {renderBody(review.myReview as string, styles.reviewText)}
           </article>
 
           <aside className={styles.sidebar}>
