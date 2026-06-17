@@ -39,6 +39,29 @@ function renderBody(content: string, className: string) {
   )
 }
 
+type RelatedCandidate = {
+  slug: string; title: string; director: string; releaseYear: number
+  posterPath: string; genres: string[]; tags: string[]; tmdbCollectionId: number | null
+}
+
+function getRelated(
+  current: { genres: string[]; tags: string[]; director: string; releaseYear: number; tmdbCollectionId: number | null },
+  all: RelatedCandidate[]
+) {
+  return all
+    .map(r => {
+      let score = 0
+      if (current.tmdbCollectionId && r.tmdbCollectionId === current.tmdbCollectionId) score += 10
+      if (r.director === current.director) score += 4
+      score += r.genres.filter(g => current.genres.includes(g)).length * 2
+      score += r.tags.filter(t => current.tags.includes(t)).length
+      if (Math.abs(r.releaseYear - current.releaseYear) <= 5) score += 1
+      return { ...r, score }
+    })
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 4)
+}
+
 async function getReview(slug: string) {
   return db.review.findFirst({ where: { slug, published: true } })
 }
@@ -76,12 +99,12 @@ export default async function ReviewPage(
   const backdropUrl = review.backdropPath ? `${TMDB_ORIGINAL}${review.backdropPath}` : null
   const cast = review.cast?.split(',').map(s => s.trim()).filter(Boolean) ?? []
 
-  const moreReviews = await db.review.findMany({
+  const allOtherReviews = await db.review.findMany({
     where: { published: true, slug: { not: review.slug } },
     orderBy: { createdAt: 'desc' },
-    take: 4,
-    select: { slug: true, title: true, director: true, releaseYear: true, posterPath: true },
+    select: { slug: true, title: true, director: true, releaseYear: true, posterPath: true, genres: true, tags: true, tmdbCollectionId: true },
   })
+  const moreReviews = getRelated(review, allOtherReviews)
 
   return (
     <>
@@ -184,7 +207,7 @@ export default async function ReviewPage(
                     <img src={`${TMDB_W500}${r.posterPath}`} alt={r.title} loading="lazy" />
                   </div>
                   <div className={styles.moreCardTitle}>{r.title}</div>
-                  <div className={styles.moreCardMeta}>{r.director} · {r.releaseYear}</div>
+                  <div className={styles.moreCardMeta}>{r.genres[0] && `${r.genres[0]} · `}{r.director} · {r.releaseYear}</div>
                 </Link>
               ))}
             </MoreReviewsReveal>

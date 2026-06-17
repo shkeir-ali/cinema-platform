@@ -17,6 +17,8 @@ function renderTitle(titleDisplay: unknown, fallback: string) {
   )
 }
 
+const TMDB_ORIGINAL = 'https://image.tmdb.org/t/p/original'
+
 export default async function FeaturedReview() {
   const review = await db.review.findFirst({
     where: { isFeatured: true, published: true },
@@ -29,13 +31,14 @@ export default async function FeaturedReview() {
   const titleWords = review.title.split(' ')
   const titleOutline = titleWords.slice(0, -1).join(' ')
   const titleFilled = titleWords[titleWords.length - 1]
+  const backdropUrl = review.backdropPath ? `${TMDB_ORIGINAL}${review.backdropPath}` : null
 
   return (
     <div className={styles.featuredWrap}>
       <FeaturedReviewEntrance />
       {/* Full-bleed background */}
       <div className={styles.featuredBg}>
-        <div className={styles.bgImage} />
+        <div className={styles.bgImage} style={backdropUrl ? { backgroundImage: `url('${backdropUrl}')` } : undefined} />
         <div className={`${styles.blob} ${styles.blob1}`} />
         <div className={`${styles.blob} ${styles.blob2}`} />
         <div className={`${styles.blob} ${styles.blob3}`} />

@@ -16,7 +16,8 @@
 
 .bgImage {
   position: absolute; inset: 0;
-  background: url('https://images2.alphacoders.com/789/thumb-1920-789853.jpg') left center / 100% auto no-repeat;
+  background-position: left center;
+  background-size: cover;
   transform: scaleX(-1);
   opacity: 0.6;
   mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.85) 35%, rgba(0,0,0,0.95) 65%);

@@ -75,6 +75,19 @@ export async function getTMDBImages(tmdbId: number): Promise<TMDBImages> {
   }
 }
 
+// ── TMDB collection ───────────────────────────────────────────────────────────
+
+async function fetchCollectionId(tmdbId: number): Promise<number | null> {
+  const key = process.env.TMDB_API_KEY
+  const res = await fetch(
+    `https://api.themoviedb.org/3/movie/${tmdbId}?api_key=${key}`,
+    { cache: 'no-store' }
+  )
+  if (!res.ok) return null
+  const data = await res.json()
+  return data.belongs_to_collection?.id ?? null
+}
+
 // ── Form parsing ──────────────────────────────────────────────────────────────
 
 // Canonical shape of editable review fields (used for both live save and draft)
@@ -146,7 +159,8 @@ function toDbData(fields: ReviewFields) {
 
 export async function createReview(_: unknown, formData: FormData) {
   const fields = parseForm(formData)
-  await db.review.create({ data: toDbData(fields) })
+  const tmdbCollectionId = await fetchCollectionId(fields.tmdbId)
+  await db.review.create({ data: { ...toDbData(fields), tmdbCollectionId } })
   revalidatePath('/admin/reviews')
   redirect('/admin/reviews')
 }
@@ -154,8 +168,8 @@ export async function createReview(_: unknown, formData: FormData) {
 export async function updateReview(_: unknown, formData: FormData) {
   const id = parseInt(formData.get('id') as string)
   const fields = parseForm(formData)
-  // Commit the form fields and clear any pending draft — the two are now in sync
-  await db.review.update({ where: { id }, data: { ...toDbData(fields), draftData: Prisma.DbNull } })
+  const tmdbCollectionId = await fetchCollectionId(fields.tmdbId)
+  await db.review.update({ where: { id }, data: { ...toDbData(fields), tmdbCollectionId, draftData: Prisma.DbNull } })
   revalidatePath('/admin/reviews')
   revalidatePath('/preview', 'layout')
   redirect('/admin/reviews')

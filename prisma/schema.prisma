@@ -40,8 +40,9 @@ model Review {
   isFeatured   Boolean  @default(false)
   published    Boolean  @default(false)
   slug         String   @unique
-  previewToken String?  @unique
-  draftData    Json?
+  previewToken     String?  @unique
+  draftData        Json?
+  tmdbCollectionId Int?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
